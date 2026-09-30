@@ -10,6 +10,7 @@ import {
   Flame,
 } from 'lucide-react';
 import { Anomaly, Experiment } from '../../types';
+import { PredictionVsActualCard } from './analytics/PredictionVsActualCard';
 
 interface AnalyticsModuleProps {
   anomalies: Anomaly[];
@@ -166,9 +167,13 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
         </div>
 
         {/* Right Column: Deep Anomaly Diagnostic Console (7 Cols) */}
-        <div className="lg:col-span-7">
+        <div className="lg:col-span-7 space-y-6">
           {activeAnomaly ? (
-            <div className="bg-white border-2 border-black rounded-xl p-6 space-y-5 shadow-xs">
+            <>
+              {/* Section 28 & 29: Prediction vs Actual Deviation Lockup */}
+              <PredictionVsActualCard anomaly={activeAnomaly} />
+
+              <div className="bg-white border-2 border-black rounded-xl p-6 space-y-5 shadow-xs">
               <div className="flex items-center justify-between pb-3 border-b border-black/10">
                 <div className="flex items-center gap-2">
                   <Flame className="w-5 h-5 text-red-600" />
@@ -235,6 +240,7 @@ export const AnalyticsModule: React.FC<AnalyticsModuleProps> = ({
                 </div>
               )}
             </div>
+            </>
           ) : (
             <div className="border-2 border-black rounded-2xl text-center p-12 bg-zinc-50 flex flex-col items-center justify-center space-y-4 shadow-xs">
               <div className="w-16 h-16 rounded-2xl bg-white border-2 border-black flex items-center justify-center shadow-xs">

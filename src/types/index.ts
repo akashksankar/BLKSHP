@@ -1,4 +1,4 @@
-export type AuthorizedBetaUser = 'Akash Sankar' | 'Alfa';
+export type AuthorizedBetaUser = 'Akash Sankar' | 'Alfa Alias' | 'Alfa';
 
 export type UserRole = 'System Architect' | 'Psychological Advisor';
 
@@ -162,6 +162,11 @@ export interface Subject {
   currentStateSummary?: string;
   importantThings?: string[];
   weakZones?: string[];
+  isObserving?: boolean;
+  isReferenceConnection?: boolean;
+  connectionNote?: string;
+  isSoleActiveSubject?: boolean;
+  status?: string;
   breakingPointAnalysis?: HumanoidMindAnalysis;
   recentObservations?: Array<{
     id: string;

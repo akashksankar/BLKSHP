@@ -1,9 +1,12 @@
 /**
- * BLACK S.H.E.E.P. - Application Navigation & Shell
- * Redesigned with White Base + Black Typography + Scientific Red Accents
+ * BLACK S.H.E.E.P. - Light Theme Application Navigation & Telemetry Shell
+ * Palette: Pure White (#FFFFFF), Deep Black (#000000), Scientific Red (#DC2626)
+ * - Live System Telemetry Strip with System Clock & Status
+ * - Synchronized Workspace indicator (Akash Sankar & Alfa Alias)
+ * - High-contrast light theme navigation
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   LayoutDashboard,
   FolderKanban,
@@ -20,6 +23,10 @@ import {
   Menu,
   X,
   User,
+  Search,
+  Brain,
+  Bell,
+  CheckCircle2,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { AuthorizedBetaUser } from '../../types';
@@ -39,6 +46,10 @@ export type ActiveModule =
 interface ShellProps {
   activeModule: ActiveModule;
   onSelectModule: (module: ActiveModule) => void;
+  onOpenCommandPalette?: () => void;
+  onOpenAIAssistant?: () => void;
+  onOpenAlerts?: () => void;
+  alertCount?: number;
   children: React.ReactNode;
 }
 
@@ -55,62 +66,102 @@ const NAV_ITEMS: Array<{ id: ActiveModule; index: string; label: string; icon: R
   { id: 'system', index: '10', label: 'SYSTEM', icon: Settings },
 ];
 
-export const Shell: React.FC<ShellProps> = ({ activeModule, onSelectModule, children }) => {
+export const Shell: React.FC<ShellProps> = ({
+  activeModule,
+  onSelectModule,
+  onOpenCommandPalette,
+  onOpenAIAssistant,
+  onOpenAlerts,
+  alertCount = 3,
+  children,
+}) => {
   const { user, jwt, logout, switchUser } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [currentTime, setCurrentTime] = useState<string>('');
+
+  useEffect(() => {
+    const updateClock = () => {
+      const now = new Date();
+      const day = now.getDate().toString().padStart(2, '0');
+      const month = now.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+      const year = now.getFullYear();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const seconds = now.getSeconds().toString().padStart(2, '0');
+      setCurrentTime(`${day} ${month} ${year} · ${hours}:${minutes}:${seconds}`);
+    };
+
+    updateClock();
+    const interval = setInterval(updateClock, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSwitchResearcher = () => {
-    const next: AuthorizedBetaUser = user?.name === 'Akash Sankar' ? 'Alfa' : 'Akash Sankar';
+    const next: AuthorizedBetaUser = user?.name === 'Akash Sankar' ? 'Alfa Alias' : 'Akash Sankar';
     switchUser(next);
   };
 
   return (
-    <div className="min-h-screen bg-white text-black flex flex-col selection:bg-red-600 selection:text-white">
+    <div className="min-h-screen bg-transparent text-black flex flex-col selection:bg-[#DC2626] selection:text-white relative z-10">
       {/* Top Telemetry Status Ribbon */}
-      <div className="w-full bg-zinc-950 text-white px-4 md:px-6 py-1.5 flex items-center justify-between text-[11px] font-mono-data">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-            <span className="text-zinc-200 font-semibold">SIMULATION ENGINE: ONLINE</span>
+      <div className="w-full bg-white/95 border-b border-black/10 text-zinc-600 px-4 md:px-6 py-1.5 flex items-center justify-between text-[11px] font-mono-data select-none backdrop-blur-md">
+        <div className="flex items-center gap-3 sm:gap-4 overflow-x-auto">
+          <div className="flex items-center gap-1.5 shrink-0">
+            <span className="w-2 h-2 rounded-full bg-[#DC2626] animate-pulse" />
+            <span className="text-black font-bold tracking-wider">SYSTEM: ONLINE</span>
           </div>
-          <span className="hidden sm:inline text-zinc-600">|</span>
-          <span className="hidden sm:inline text-zinc-300">CYCLE #144 (EPOCH 4)</span>
-          <span className="hidden md:inline text-zinc-600">|</span>
-          <span className="hidden md:inline text-zinc-300">PROTOCOL: S.H.E.E.P. v0.1-BETA</span>
+          <span className="text-zinc-300">|</span>
+          <div className="flex items-center gap-1 shrink-0 text-[#DC2626] font-semibold">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#DC2626]" />
+            <span>GRID: FLOWING (60Hz)</span>
+          </div>
+          <span className="text-zinc-300 hidden sm:inline">|</span>
+          <div className="hidden sm:flex items-center gap-1 shrink-0 text-emerald-700 font-semibold">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+            <span>SHARED WORKSPACE: SYNCED</span>
+          </div>
+          <span className="text-zinc-300 hidden md:inline">|</span>
+          <span className="hidden md:inline text-zinc-700">SUBJECT: A S REMIN KRISHNA (HX-001)</span>
+          <span className="text-zinc-300 hidden lg:inline">|</span>
+          <span className="hidden lg:inline text-zinc-500">RAG KNOWLEDGE: MOUNTED</span>
         </div>
-        <div className="flex items-center gap-3">
-          <span className="hidden sm:inline bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded text-[10px] font-mono-data border border-zinc-700">
-            JWT: HS256 (VERIFIED)
+
+        <div className="flex items-center gap-3 shrink-0">
+          {/* Live System Clock */}
+          <div className="hidden sm:flex items-center gap-1.5 text-zinc-600">
+            <Clock className="w-3 h-3 text-[#DC2626]" />
+            <span className="tracking-wide text-[10px] text-black font-bold">{currentTime}</span>
+          </div>
+          <span className="text-zinc-300 hidden sm:inline">|</span>
+          <span className="text-[#DC2626] font-bold text-[10px] bg-red-50 px-2 py-0.5 rounded-xs border border-red-200">
+            CLEARANCE: LEVEL-5
           </span>
-          <span className="text-red-400 font-semibold">CLEARANCE: LEVEL-5</span>
-          <span className="text-zinc-600">|</span>
-          <span className="text-zinc-300">STATION BS-01</span>
         </div>
       </div>
 
-      {/* Main Top Bar */}
-      <header className="sticky top-0 z-30 w-full bg-white/95 backdrop-blur-md border-b-2 border-black px-4 md:px-6 py-3 flex items-center justify-between shadow-xs">
-        {/* Zone 1: Single text element wordmark */}
+      {/* Main Top Navigation Header */}
+      <header className="sticky top-0 z-30 w-full bg-white/95 backdrop-blur-md border-b border-black/15 px-4 md:px-6 py-2.5 flex items-center justify-between shadow-xs">
+        {/* Brand Wordmark */}
         <div className="flex items-center gap-3">
           <button
             onClick={() => onSelectModule('overview')}
-            className="flex items-center gap-2.5 text-left focus:outline-none cursor-pointer"
+            className="flex items-center gap-2.5 text-left focus:outline-none cursor-pointer group"
           >
-            <div className="w-8 h-8 rounded bg-red-600 flex items-center justify-center font-display text-lg font-bold text-white shadow-sm">
+            <div className="w-8 h-8 rounded-xs bg-black border border-[#DC2626] flex items-center justify-center font-display text-lg font-bold text-white shadow-xs group-hover:scale-105 transition-transform">
               BS
             </div>
             <div>
-              <span className="font-display text-2xl tracking-wider text-black hover:text-red-600 transition-colors leading-none block">
+              <span className="font-display text-2xl tracking-widest text-black group-hover:text-[#DC2626] transition-colors leading-none block">
                 BLACK S.H.E.E.P.
               </span>
-              <span className="text-[9px] font-mono-data tracking-widest text-red-600 uppercase block font-bold">
-                RESEARCH WORKSTATION
+              <span className="text-[9px] font-mono-data tracking-widest text-[#DC2626] uppercase block font-bold">
+                HUMAN BEHAVIORAL WORKSTATION
               </span>
             </div>
           </button>
         </div>
 
-        {/* Zone 2: Navigation Links (Desktop) */}
+        {/* Desktop Navigation Links */}
         <nav className="hidden xl:flex items-center gap-1">
           {NAV_ITEMS.map((item) => {
             const isActive = activeModule === item.id;
@@ -118,13 +169,17 @@ export const Shell: React.FC<ShellProps> = ({ activeModule, onSelectModule, chil
               <button
                 key={item.id}
                 onClick={() => onSelectModule(item.id)}
-                className={`px-2.5 py-1.5 rounded text-xs font-mono-data tracking-wide transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
+                className={`relative px-2.5 py-1.5 rounded-xs text-xs font-mono-data tracking-wide transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
                   isActive
-                    ? 'bg-red-600 text-white font-bold shadow-xs'
-                    : 'text-zinc-700 hover:text-black hover:bg-zinc-100 font-medium'
+                    ? 'text-black font-bold bg-red-50 border border-[#DC2626] shadow-xs'
+                    : 'text-zinc-600 hover:text-black hover:bg-zinc-100 border border-transparent'
                 }`}
               >
-                <span className={`text-[10px] ${isActive ? 'text-white' : 'text-zinc-400'}`}>
+                {/* Active Red Indicator */}
+                {isActive && (
+                  <span className="absolute bottom-0 inset-x-0 h-[2px] bg-[#DC2626]" />
+                )}
+                <span className={`text-[10px] ${isActive ? 'text-[#DC2626] font-bold' : 'text-zinc-400'}`}>
                   {item.index}
                 </span>
                 <span>{item.label}</span>
@@ -133,11 +188,48 @@ export const Shell: React.FC<ShellProps> = ({ activeModule, onSelectModule, chil
           })}
         </nav>
 
-        {/* Zone 3: Active Researcher Badge, Switcher & Logout */}
+        {/* Global Controls & Researcher Badge */}
         <div className="flex items-center gap-2 md:gap-3">
-          {/* Researcher Profile Pill */}
-          <div className="flex items-center gap-2 bg-zinc-50 border border-black/20 rounded-md px-2.5 py-1 shadow-xs">
-            <User className="w-3.5 h-3.5 text-red-600" />
+          {/* Command Palette Button */}
+          <button
+            onClick={onOpenCommandPalette}
+            title="Open Classified Command Palette (Ctrl+K)"
+            className="flex items-center gap-1.5 px-2.5 py-1 bg-white border border-black/15 hover:border-[#DC2626] text-black rounded-xs text-xs font-mono-data cursor-pointer transition-colors shadow-xs"
+          >
+            <Search className="w-3.5 h-3.5 text-[#DC2626]" />
+            <span className="hidden sm:inline font-bold">FIND</span>
+            <kbd className="hidden sm:inline text-[9px] bg-zinc-100 border border-zinc-300 px-1 rounded text-zinc-600 font-bold">
+              ⌘K
+            </kbd>
+          </button>
+
+          {/* AI Intel Assistant Trigger */}
+          <button
+            onClick={onOpenAIAssistant}
+            title="Open AI Intel Assistant"
+            className="flex items-center gap-1.5 px-2.5 py-1 bg-red-50 hover:bg-red-100 border border-red-200 text-[#DC2626] hover:text-[#B91C1C] rounded-xs text-xs font-mono-data cursor-pointer transition-colors shadow-xs font-bold"
+          >
+            <Brain className="w-3.5 h-3.5 text-[#DC2626]" />
+            <span className="hidden md:inline">AI INTEL</span>
+          </button>
+
+          {/* Alert Center Trigger */}
+          <button
+            onClick={onOpenAlerts}
+            title="View Active Telemetry Alerts"
+            className="relative p-1.5 rounded-xs bg-white border border-black/15 hover:border-[#DC2626] text-black cursor-pointer transition-colors"
+          >
+            <Bell className="w-4 h-4 text-[#DC2626]" />
+            {alertCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-[#DC2626] text-white rounded-full text-[8px] font-bold flex items-center justify-center font-mono-data">
+                {alertCount}
+              </span>
+            )}
+          </button>
+
+          {/* Active Researcher Profile Pill */}
+          <div className="flex items-center gap-2 bg-white border border-black/20 rounded-xs px-2.5 py-1 shadow-xs font-mono-data">
+            <User className="w-3.5 h-3.5 text-[#DC2626]" />
             <div className="text-left hidden sm:block">
               <div className="flex items-center gap-1.5">
                 <p className="text-xs font-bold text-black leading-tight">
@@ -145,22 +237,22 @@ export const Shell: React.FC<ShellProps> = ({ activeModule, onSelectModule, chil
                 </p>
                 <span
                   title={`JWT HS256 Verified (sub: ${jwt?.sub || user?.id})`}
-                  className="text-[9px] font-mono-data bg-red-100 text-red-700 px-1 py-0.2 rounded font-bold"
+                  className="text-[9px] bg-red-50 text-[#DC2626] px-1 py-0.2 rounded-xs font-bold border border-red-200"
                 >
                   JWT
                 </span>
               </div>
-              <p className="text-[10px] text-red-600 font-mono-data leading-tight font-semibold">
-                {user?.role}
+              <p className="text-[10px] text-[#DC2626] leading-tight font-semibold">
+                {user?.role} (Shared Workspace)
               </p>
             </div>
-            {/* Quick Persona Switcher */}
+            {/* Quick Switcher between Akash Sankar & Alfa Alias */}
             <button
               onClick={handleSwitchResearcher}
-              title={`Switch to ${user?.name === 'Akash Sankar' ? 'Alfa' : 'Akash Sankar'}`}
-              className="p-1 hover:bg-red-100 rounded text-zinc-600 hover:text-red-600 transition-colors cursor-pointer"
+              title={`Switch terminal view to ${user?.name === 'Akash Sankar' ? 'Alfa Alias' : 'Akash Sankar'}`}
+              className="p-1 hover:bg-zinc-100 rounded text-zinc-500 hover:text-[#DC2626] transition-colors cursor-pointer"
             >
-              <RefreshCw className="w-3 h-3 text-red-600" />
+              <RefreshCw className="w-3 h-3" />
             </button>
           </div>
 
@@ -168,7 +260,7 @@ export const Shell: React.FC<ShellProps> = ({ activeModule, onSelectModule, chil
           <button
             onClick={() => logout()}
             title="Terminate Research Session"
-            className="p-1.5 rounded border border-black/20 hover:border-red-600 hover:bg-red-50 text-zinc-600 hover:text-red-600 transition-colors cursor-pointer"
+            className="p-1.5 rounded-xs border border-zinc-200 hover:border-[#DC2626] hover:bg-red-50 text-zinc-500 hover:text-[#DC2626] transition-colors cursor-pointer"
           >
             <LogOut className="w-4 h-4" />
           </button>
@@ -176,7 +268,7 @@ export const Shell: React.FC<ShellProps> = ({ activeModule, onSelectModule, chil
           {/* Mobile Menu Toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="xl:hidden p-1.5 rounded border border-black/20 text-black hover:bg-zinc-100 cursor-pointer"
+            className="xl:hidden p-1.5 rounded-xs border border-zinc-300 text-black hover:bg-zinc-100 cursor-pointer"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -184,18 +276,20 @@ export const Shell: React.FC<ShellProps> = ({ activeModule, onSelectModule, chil
       </header>
 
       {/* Sub-navigation bar for laptop/tablet viewports */}
-      <div className="hidden md:flex xl:hidden w-full bg-zinc-50 border-b border-black/10 px-4 py-2 overflow-x-auto gap-1">
+      <div className="hidden md:flex xl:hidden w-full bg-white border-b border-black/10 px-4 py-1.5 overflow-x-auto gap-1">
         {NAV_ITEMS.map((item) => {
           const isActive = activeModule === item.id;
           return (
             <button
               key={item.id}
               onClick={() => onSelectModule(item.id)}
-              className={`px-2.5 py-1 rounded text-xs font-mono-data whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
-                isActive ? 'bg-red-600 text-white font-bold' : 'text-zinc-700 hover:bg-zinc-200'
+              className={`px-2.5 py-1 rounded-xs text-xs font-mono-data whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
+                isActive
+                  ? 'bg-[#DC2626] text-white font-bold'
+                  : 'text-zinc-600 hover:text-black hover:bg-zinc-100'
               }`}
             >
-              <span className="text-[10px] text-zinc-500">{item.index}</span>
+              <span className="text-[10px] text-zinc-400">{item.index}</span>
               <span>{item.label}</span>
             </button>
           );
@@ -204,7 +298,7 @@ export const Shell: React.FC<ShellProps> = ({ activeModule, onSelectModule, chil
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="xl:hidden bg-white border-b-2 border-black p-4 space-y-1 shadow-lg">
+        <div className="xl:hidden bg-white border-b-2 border-[#DC2626] p-4 space-y-1 shadow-lg">
           {NAV_ITEMS.map((item) => {
             const Icon = item.icon;
             const isActive = activeModule === item.id;
@@ -215,11 +309,13 @@ export const Shell: React.FC<ShellProps> = ({ activeModule, onSelectModule, chil
                   onSelectModule(item.id);
                   setMobileMenuOpen(false);
                 }}
-                className={`w-full px-3 py-2 rounded text-xs font-mono-data flex items-center gap-3 cursor-pointer ${
-                  isActive ? 'bg-red-600 text-white font-bold' : 'text-zinc-800 hover:bg-zinc-100'
+                className={`w-full px-3 py-2 rounded-xs text-xs font-mono-data flex items-center gap-3 cursor-pointer ${
+                  isActive
+                    ? 'bg-[#DC2626] text-white font-bold'
+                    : 'text-zinc-700 hover:bg-zinc-100'
                 }`}
               >
-                <Icon className="w-4 h-4" />
+                <Icon className="w-4 h-4 text-[#DC2626]" />
                 <span>{item.index}.</span>
                 <span>{item.label}</span>
               </button>
@@ -228,22 +324,22 @@ export const Shell: React.FC<ShellProps> = ({ activeModule, onSelectModule, chil
         </div>
       )}
 
-      {/* Workspace Content Stage */}
-      <main className="flex-1 w-full max-w-7xl mx-auto p-4 md:p-6 lg:p-8 bg-white">
+      {/* Main Workspace Stage */}
+      <main className="flex-1 w-full max-w-7xl mx-auto p-4 md:p-6 lg:p-8 relative z-10">
         {children}
       </main>
 
       {/* Footer */}
-      <footer className="w-full bg-white border-t border-black/10 px-6 py-3 flex flex-col sm:flex-row items-center justify-between text-xs font-mono-data text-zinc-500">
+      <footer className="w-full bg-white/95 border-t border-black/10 px-6 py-3 flex flex-col sm:flex-row items-center justify-between text-xs font-mono-data text-zinc-600 relative z-10 backdrop-blur-md">
         <div>
-          <span className="text-black font-semibold">BLACK S.H.E.E.P. PROTOCOL</span>
+          <span className="text-black font-bold">BLACK S.H.E.E.P. PROTOCOL</span>
           <span className="mx-2">·</span>
           <span>BETA v0.1</span>
           <span className="mx-2">·</span>
-          <span>AUTHORIZED RESEARCH PERSONNEL ONLY</span>
+          <span>SHARED WORKSPACE: AKASH SANKAR &amp; ALFA ALIAS</span>
         </div>
-        <div className="mt-2 sm:mt-0 text-zinc-600">
-          OPERATING IN COMPANION RESEARCH WORKSTATION MODE
+        <div className="mt-2 sm:mt-0 text-zinc-500">
+          OPERATING IN MUTUAL COMPANION RESEARCH WORKSTATION MODE
         </div>
       </footer>
     </div>

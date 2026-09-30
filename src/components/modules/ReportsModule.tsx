@@ -86,7 +86,7 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
       const dateStr = timestamp.slice(0, 10);
 
       // Header Meta Block
-      rows.push('PROJECT,BLACK S.H.E.E.P. - STRATEGIC HUMANOID EXPERIMENT AND EVALUATION PROTOCOL');
+      rows.push('PROJECT,BLACK S.H.E.E.P. - STRATEGIC HUMAN EXPERIMENT AND EVALUATION PROTOCOL');
       rows.push('REPORT TYPE,CLASSIFIED RESEARCH FINDINGS DOSSIER');
       rows.push(`EXPORT DATE,${escapeCSV(timestamp)}`);
       rows.push(`CASE CODE,${escapeCSV(activeCase?.code || 'N/A')}`);
@@ -108,7 +108,7 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
 
       // Section 2: Monitored Cohort Subjects
       if (includeSubjects) {
-        rows.push('=== SECTION 2: MONITORED SYNTHETIC COHORT ===');
+        rows.push('=== SECTION 2: MONITORED RESEARCH COHORT ===');
         rows.push([
           'Subject ID',
           'Code',
@@ -321,7 +321,7 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
         doc.setTextColor(30, 41, 59);
 
         const overviewText = activeCase?.description ||
-          'This case evaluates behavioral conformity, stress-induced deviation thresholds, and social compliance within synthetic open-world humanoid cohorts.';
+          'This case evaluates behavioral conformity, stress-induced deviation thresholds, and social compliance within human subject cohorts.';
         const splitOverview = doc.splitTextToSize(overviewText, contentWidth);
         doc.text(splitOverview, margin, currentY);
         currentY += splitOverview.length * 4.2 + 4;
@@ -359,7 +359,7 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(11);
         doc.setTextColor(0, 0, 0);
-        doc.text(`02. MONITORED SYNTHETIC COHORT (${caseSubjects.length} SUBJECTS)`, margin, currentY);
+        doc.text(`02. MONITORED RESEARCH COHORT (${caseSubjects.length} SUBJECTS)`, margin, currentY);
         currentY += 5;
 
         // Table Header
@@ -562,14 +562,16 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
   return (
     <div className="space-y-6">
       {/* Module Title Banner & Actions */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b-2 border-black gap-4 no-print">
+      <div className="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-black/10 gap-4 no-print">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono-data text-red-600 font-bold mb-1">
+          <div className="flex items-center gap-2 text-xs font-mono-data text-red-600 tracking-widest uppercase font-bold">
             <span>MODULE 09</span>
             <span>·</span>
-            <span>FORMAL SCIENTIFIC CASE REPORT GENERATOR</span>
+            <span>CLASSIFIED DOSSIER COMPILER</span>
+            <span>·</span>
+            <span className="text-black">LEVEL-5 SCIENTIFIC EXPORT</span>
           </div>
-          <h1 className="font-display text-4xl text-black tracking-wider">
+          <h1 className="font-display text-4xl text-black tracking-wider mt-1">
             CASE REPORTS & DOSSIERS
           </h1>
           <p className="text-xs text-zinc-600 font-mono-data mt-0.5">
@@ -583,7 +585,7 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
           <select
             value={selectedCaseId}
             onChange={(e) => setSelectedCaseId(e.target.value)}
-            className="bg-white border-2 border-black rounded-lg px-3 py-2 text-xs font-mono-data text-black font-semibold focus:outline-none focus:border-red-600 shadow-xs cursor-pointer"
+            className="bg-white border border-black/20 rounded px-3 py-2 text-xs font-mono-data text-black font-semibold focus:outline-none focus:border-red-600 cursor-pointer shadow-xs"
           >
             {cases.map((c) => (
               <option key={c.id} value={c.id}>
@@ -597,7 +599,7 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
             onClick={handleExportPDF}
             disabled={isExportingPDF}
             title="Download formatted PDF research dossier"
-            className="px-3.5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-mono-data font-bold tracking-wide transition-all flex items-center gap-1.5 shadow-xs cursor-pointer active:scale-95 disabled:opacity-50"
+            className="px-3.5 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-mono-data font-bold tracking-wider transition-all flex items-center gap-1.5 shadow-sm cursor-pointer disabled:opacity-50"
           >
             <Download className="w-3.5 h-3.5" />
             <span>{isExportingPDF ? 'GENERATING PDF...' : 'EXPORT PDF'}</span>
@@ -608,9 +610,9 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
             onClick={handleExportCSV}
             disabled={isExportingCSV}
             title="Download full CSV findings dataset for statistical analysis"
-            className="px-3.5 py-2 bg-black hover:bg-zinc-800 text-white rounded-lg text-xs font-mono-data font-bold tracking-wide transition-all flex items-center gap-1.5 shadow-xs cursor-pointer active:scale-95 disabled:opacity-50"
+            className="px-3.5 py-2 bg-white hover:bg-zinc-100 text-black border border-black/20 rounded text-xs font-mono-data font-bold tracking-wider transition-all flex items-center gap-1.5 cursor-pointer shadow-xs disabled:opacity-50"
           >
-            <FileSpreadsheet className="w-3.5 h-3.5 text-red-500" />
+            <FileSpreadsheet className="w-3.5 h-3.5 text-red-600" />
             <span>{isExportingCSV ? 'GENERATING CSV...' : 'EXPORT CSV'}</span>
           </button>
 
@@ -618,34 +620,34 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
           <div className="relative">
             <button
               onClick={() => setExportMenuOpen(!exportMenuOpen)}
-              className="p-2 border-2 border-black rounded-lg hover:bg-zinc-100 text-black transition-colors cursor-pointer"
+              className="p-2 border border-black/20 rounded hover:bg-zinc-100 text-zinc-700 hover:text-black transition-colors cursor-pointer bg-white shadow-xs"
               title="Export Options"
             >
               <Settings className="w-4 h-4" />
             </button>
 
             {exportMenuOpen && (
-              <div className="absolute right-0 mt-2 w-56 bg-white border-2 border-black rounded-xl shadow-xl z-30 p-2 text-xs font-mono-data space-y-1">
+              <div className="absolute right-0 mt-2 w-56 bg-white border border-black/15 rounded-lg shadow-xl z-30 p-2 text-xs font-mono-data space-y-1">
                 <div className="px-2 py-1.5 border-b border-black/10 text-zinc-500 font-bold text-[10px] uppercase">
                   DOCUMENT EXPORT OPTIONS
                 </div>
                 <button
                   onClick={handleExportPDF}
-                  className="w-full text-left px-2.5 py-1.5 hover:bg-zinc-100 rounded-md flex items-center gap-2 text-black font-semibold cursor-pointer"
+                  className="w-full text-left px-2.5 py-1.5 hover:bg-red-50 rounded flex items-center gap-2 text-black font-semibold cursor-pointer"
                 >
                   <FileText className="w-3.5 h-3.5 text-red-600" />
                   <span>Download .PDF Dossier</span>
                 </button>
                 <button
                   onClick={handleExportCSV}
-                  className="w-full text-left px-2.5 py-1.5 hover:bg-zinc-100 rounded-md flex items-center gap-2 text-black font-semibold cursor-pointer"
+                  className="w-full text-left px-2.5 py-1.5 hover:bg-zinc-100 rounded flex items-center gap-2 text-black font-semibold cursor-pointer"
                 >
-                  <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
+                  <FileSpreadsheet className="w-3.5 h-3.5 text-red-600" />
                   <span>Download .CSV Dataset</span>
                 </button>
                 <button
                   onClick={handlePrint}
-                  className="w-full text-left px-2.5 py-1.5 hover:bg-zinc-100 rounded-md flex items-center gap-2 text-black font-semibold cursor-pointer"
+                  className="w-full text-left px-2.5 py-1.5 hover:bg-zinc-100 rounded flex items-center gap-2 text-black font-semibold cursor-pointer"
                 >
                   <Printer className="w-3.5 h-3.5 text-blue-600" />
                   <span>Browser Print / Save PDF</span>
@@ -656,7 +658,7 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
                       setExportMenuOpen(false);
                       setShowExportModal(true);
                     }}
-                    className="w-full text-left px-2.5 py-1.5 hover:bg-red-50 text-red-600 font-bold rounded-md flex items-center gap-2 cursor-pointer"
+                    className="w-full text-left px-2.5 py-1.5 hover:bg-red-50 text-red-600 font-bold rounded flex items-center gap-2 cursor-pointer"
                   >
                     <Layers className="w-3.5 h-3.5" />
                     <span>Customize Export Fields...</span>
@@ -670,9 +672,9 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
           <button
             onClick={handlePrint}
             title="Print or Save via Browser System Dialog"
-            className="px-3 py-2 border-2 border-black/30 hover:border-black rounded-lg text-xs font-mono-data text-zinc-700 hover:text-black font-bold flex items-center gap-1.5 cursor-pointer bg-white"
+            className="px-3 py-2 border border-black/20 hover:border-black rounded text-xs font-mono-data text-zinc-700 hover:text-black font-bold flex items-center gap-1.5 cursor-pointer bg-white shadow-xs"
           >
-            <Printer className="w-3.5 h-3.5" />
+            <Printer className="w-3.5 h-3.5 text-red-600" />
             <span className="hidden sm:inline">PRINT</span>
           </button>
         </div>
@@ -680,7 +682,7 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
 
       {/* Success Notification Banner */}
       {exportMessage && (
-        <div className="p-3.5 rounded-xl bg-emerald-50 border-2 border-emerald-500 text-xs font-mono-data text-emerald-900 flex items-center justify-between shadow-xs animate-in fade-in duration-200 no-print">
+        <div className="p-3.5 rounded-lg bg-emerald-50 border border-emerald-300 text-xs font-mono-data text-emerald-800 flex items-center justify-between shadow-xs animate-in fade-in duration-200 no-print">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
             <span className="font-semibold">{exportMessage}</span>
@@ -696,10 +698,8 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
 
       {/* Formal Research Report Document */}
       {cases.length === 0 ? (
-        <div className="border-2 border-black rounded-2xl text-center p-12 bg-zinc-50 flex flex-col items-center justify-center space-y-4 shadow-xs max-w-5xl mx-auto">
-          <div className="w-16 h-16 rounded-2xl bg-white border-2 border-black flex items-center justify-center shadow-xs">
-            <FileText className="w-8 h-8 text-red-600" />
-          </div>
+        <div className="border border-dashed border-black/20 rounded-xl text-center p-12 bg-zinc-50 flex flex-col items-center justify-center space-y-4 max-w-5xl mx-auto shadow-xs">
+          <FileText className="w-10 h-10 text-red-600" />
           <div className="max-w-md space-y-1.5">
             <h3 className="font-display text-2xl text-black tracking-wide">
               NO RESEARCH CASES AVAILABLE FOR REPORTING
@@ -710,7 +710,7 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
           </div>
         </div>
       ) : (
-        <div className="bg-white border-2 border-black rounded-2xl p-8 max-w-5xl mx-auto space-y-8 shadow-md relative print:border-none print:shadow-none print:p-0">
+        <div className="bg-white border border-black/15 rounded-xl p-8 max-w-5xl mx-auto space-y-8 shadow-lg relative print:bg-white print:border-none print:shadow-none print:p-0 print:text-black">
           {/* Document Header Lockup */}
           <div className="border-b-2 border-red-600 pb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
@@ -734,167 +734,169 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
             </div>
           </div>
 
-        {/* Section 01: Executive Research Overview */}
-        {includeOverview && (
-          <div className="space-y-3 print-break-inside-avoid">
-            <h3 className="font-display text-xl text-black tracking-wider border-b border-black/10 pb-1 flex items-center justify-between">
-              <span>01. EXECUTIVE RESEARCH OVERVIEW & OBJECTIVE</span>
-              <span className="text-[10px] font-mono-data text-zinc-400 font-normal">SEC-01</span>
-            </h3>
-            <p className="text-sm text-zinc-800 leading-relaxed font-normal">
-              {activeCase?.description ||
-                'This case evaluates behavioral conformity, stress-induced deviation thresholds, and social compliance within synthetic open-world humanoid cohorts.'}
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-              <div className="p-4 rounded-xl bg-zinc-50 border border-black/20">
-                <span className="text-[10px] font-mono-data text-red-600 font-bold uppercase tracking-wider block mb-1">
-                  RESEARCH QUESTION
-                </span>
-                <p className="text-xs text-black italic font-medium leading-relaxed">
-                  "{activeCase?.researchQuestion || 'What triggers autonomous behavioral defiance?'}"
-                </p>
-              </div>
-              <div className="p-4 rounded-xl bg-zinc-50 border border-black/20">
-                <span className="text-[10px] font-mono-data text-red-600 font-bold uppercase tracking-wider block mb-1">
-                  PRIMARY SIMULATION HYPOTHESIS
-                </span>
-                <p className="text-xs text-black italic font-medium leading-relaxed">
-                  "{activeCase?.initialHypothesis || 'Peer conformity degrades when attachment bonds are threatened.'}"
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Section 02: Monitored Subjects Dossier */}
-        {includeSubjects && (
-          <div className="space-y-3 print-break-inside-avoid">
-            <h3 className="font-display text-xl text-black tracking-wider border-b border-black/10 pb-1 flex items-center justify-between">
-              <span>02. MONITORED SYNTHETIC COHORT ({caseSubjects.length} SUBJECTS)</span>
-              <span className="text-[10px] font-mono-data text-zinc-400 font-normal">SEC-02</span>
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {caseSubjects.map((sub) => (
-                <div key={sub.id} className="p-3.5 rounded-xl border-2 border-black/20 bg-zinc-50 space-y-1">
-                  <div className="flex items-center justify-between text-xs font-mono-data">
-                    <span className="text-red-600 font-bold">{sub.code}</span>
-                    <span className="text-black font-semibold">Stress: {sub.emotionalState.stress}%</span>
-                  </div>
-                  <h4 className="font-display text-lg text-black">{sub.name}</h4>
-                  <p className="text-[11px] text-zinc-600 font-mono-data">{sub.occupation}</p>
-                  <p className="text-[10px] text-zinc-500 pt-1 border-t border-black/10 truncate font-medium">
-                    Traits: {sub.personalityTraits.join(', ')}
+          {/* Section 01: Executive Research Overview */}
+          {includeOverview && (
+            <div className="space-y-3 print-break-inside-avoid">
+              <h3 className="font-display text-xl text-black tracking-wider border-b border-black/10 pb-1 flex items-center justify-between">
+                <span>01. EXECUTIVE RESEARCH OVERVIEW & OBJECTIVE</span>
+                <span className="text-[10px] font-mono-data text-zinc-400 font-normal">SEC-01</span>
+              </h3>
+              <p className="text-sm text-zinc-700 leading-relaxed font-normal">
+                {activeCase?.description ||
+                  'This case evaluates behavioral conformity, stress-induced deviation thresholds, and social compliance within human subject cohorts.'}
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                <div className="p-4 rounded-lg bg-zinc-50 border border-black/10">
+                  <span className="text-[10px] font-mono-data text-red-600 font-bold uppercase tracking-wider block mb-1">
+                    RESEARCH QUESTION
+                  </span>
+                  <p className="text-xs text-zinc-800 italic font-medium leading-relaxed">
+                    "{activeCase?.researchQuestion || 'What triggers autonomous behavioral defiance?'}"
                   </p>
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Section 03: Experimental Trials & Predictions vs Actual */}
-        {includeExperiments && (
-          <div className="space-y-3 print-break-inside-avoid">
-            <h3 className="font-display text-xl text-black tracking-wider border-b border-black/10 pb-1 flex items-center justify-between">
-              <span>03. EXPERIMENTAL PROTOCOLS & DEVIATION COMPARISONS ({caseExperiments.length} TRIALS)</span>
-              <span className="text-[10px] font-mono-data text-zinc-400 font-normal">SEC-03</span>
-            </h3>
-            <div className="space-y-4">
-              {caseExperiments.map((exp) => (
-                <div key={exp.id} className="p-4 rounded-xl bg-zinc-50 border-2 border-black space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono-data px-2.5 py-0.5 rounded bg-red-600 text-white font-bold">
-                        {exp.code}
-                      </span>
-                      <h4 className="font-display text-xl text-black">{exp.title}</h4>
-                    </div>
-                    <span className="text-xs font-mono-data text-red-600 font-bold">STATUS: {exp.status}</span>
-                  </div>
-
-                  <p className="text-xs text-zinc-700 font-normal leading-relaxed">{exp.scenario}</p>
-
-                  {/* Prediction vs Actual */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono-data pt-2">
-                    <div className="p-3 rounded-lg bg-white border border-black/20">
-                      <span className="text-[10px] text-zinc-500 block mb-0.5 font-bold">FORMULATED PREDICTION</span>
-                      <span className="text-black font-medium">
-                        {exp.prediction?.predictedOutcome || exp.expectedBehavior}
-                      </span>
-                    </div>
-
-                    <div className="p-3 rounded-lg bg-red-50 border-2 border-red-600">
-                      <span className="text-[10px] text-red-700 block mb-0.5 font-bold">
-                        ACTUAL OUTCOME
-                      </span>
-                      <span className="text-black font-bold">
-                        {exp.actualOutcome?.observedBehavior || 'Trial pending execution.'}
-                      </span>
-                    </div>
-                  </div>
+                <div className="p-4 rounded-lg bg-zinc-50 border border-black/10">
+                  <span className="text-[10px] font-mono-data text-red-600 font-bold uppercase tracking-wider block mb-1">
+                    PRIMARY SIMULATION HYPOTHESIS
+                  </span>
+                  <p className="text-xs text-zinc-800 italic font-medium leading-relaxed">
+                    "{activeCase?.initialHypothesis || 'Peer conformity degrades when attachment bonds are threatened.'}"
+                  </p>
                 </div>
-              ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Section 04: Grounded RAG References */}
-        {includeCitations && (
-          <div className="space-y-3 print-break-inside-avoid">
-            <h3 className="font-display text-xl text-black tracking-wider border-b border-black/10 pb-1 flex items-center justify-between">
-              <span>04. GROUNDED LITERATURE & CITATIONS</span>
-              <span className="text-[10px] font-mono-data text-zinc-400 font-normal">SEC-04</span>
-            </h3>
-            <ul className="space-y-2 text-xs font-mono-data text-zinc-800">
-              <li className="flex items-start gap-2">
-                <span className="text-red-600 font-bold">▸</span>
-                <span>
-                  <strong>Thinking, Fast and Slow (Daniel Kahneman):</strong> Heuristic compliance under ego
-                  depletion and prospect loss aversion in peer cohorts.
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-red-600 font-bold">▸</span>
-                <span>
-                  <strong>Dictionary of Body Language (Joe Navarro):</strong> Ventral denial, gaze aversion, and
-                  suprasternal notch pacifying during confrontation.
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-red-600 font-bold">▸</span>
-                <span>
-                  <strong>In Sheep's Clothing (Dr. George Simon):</strong> Covert aggression and social scapegoating
-                  dynamics in simulated hierarchical groups.
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-red-600 font-bold">▸</span>
-                <span>
-                  <strong>The Prince (Niccolò Machiavelli):</strong> Realpolitik alliance maneuvering and pre-emptive defection.
-                </span>
-              </li>
-            </ul>
-          </div>
-        )}
+          {/* Section 02: Monitored Subjects Dossier */}
+          {includeSubjects && (
+            <div className="space-y-3 print-break-inside-avoid">
+              <h3 className="font-display text-xl text-black tracking-wider border-b border-black/10 pb-1 flex items-center justify-between">
+                <span>02. RESEARCH COHORT ({caseSubjects.length} SUBJECTS)</span>
+                <span className="text-[10px] font-mono-data text-zinc-400 font-normal">SEC-02</span>
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {caseSubjects.map((sub) => (
+                  <div key={sub.id} className="p-3.5 rounded-lg border border-black/10 bg-zinc-50 space-y-1 shadow-xs">
+                    <div className="flex items-center justify-between text-xs font-mono-data">
+                      <span className="text-red-600 font-bold">{sub.code}</span>
+                      <span className="text-zinc-600 font-semibold">Stress: {sub.emotionalState.stress}%</span>
+                    </div>
+                    <h4 className="font-display text-lg text-black">{sub.name}</h4>
+                    <p className="text-[11px] text-zinc-600 font-mono-data">{sub.occupation}</p>
+                    <p className="text-[10px] text-zinc-500 pt-1 border-t border-black/10 truncate font-medium">
+                      Traits: {sub.personalityTraits.join(', ')}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
-        {/* Section 05: Sign-Off */}
-        {includeSignOff && (
-          <div className="pt-6 border-t-2 border-black flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs font-mono-data text-zinc-600 gap-4 print-break-inside-avoid">
-            <div>
-              <p className="text-black font-bold">VERIFIED BY RESEARCH ARCHITECTS:</p>
-              <p>Akash Sankar (System Architect) · Alfa (Psychological Advisor)</p>
+          {/* Section 03: Experimental Trials & Predictions vs Actual */}
+          {includeExperiments && (
+            <div className="space-y-3 print-break-inside-avoid">
+              <h3 className="font-display text-xl text-black tracking-wider border-b border-black/10 pb-1 flex items-center justify-between">
+                <span>03. EXPERIMENTAL PROTOCOLS & DEVIATION COMPARISONS ({caseExperiments.length} TRIALS)</span>
+                <span className="text-[10px] font-mono-data text-zinc-400 font-normal">SEC-03</span>
+              </h3>
+              <div className="space-y-4">
+                {caseExperiments.map((exp) => (
+                  <div key={exp.id} className="p-4 rounded-lg bg-zinc-50 border border-black/10 space-y-3 shadow-xs">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-mono-data px-2.5 py-0.5 rounded bg-red-600 text-white font-bold">
+                          {exp.code}
+                        </span>
+                        <h4 className="font-display text-xl text-black">{exp.title}</h4>
+                      </div>
+                      <span className="text-xs font-mono-data text-red-600 font-bold">
+                        STATUS: {exp.status}
+                      </span>
+                    </div>
+
+                    <p className="text-xs text-zinc-700 font-normal leading-relaxed">{exp.scenario}</p>
+
+                    {/* Prediction vs Actual */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono-data pt-2">
+                      <div className="p-3 rounded-lg bg-white border border-black/10">
+                        <span className="text-[10px] text-zinc-500 block mb-0.5 font-bold">FORMULATED PREDICTION</span>
+                        <span className="text-zinc-800 font-medium">
+                          {exp.prediction?.predictedOutcome || exp.expectedBehavior}
+                        </span>
+                      </div>
+
+                      <div className="p-3 rounded-lg bg-red-50 border border-red-200">
+                        <span className="text-[10px] text-red-700 block mb-0.5 font-bold">
+                          ACTUAL OUTCOME
+                        </span>
+                        <span className="text-black font-bold">
+                          {exp.actualOutcome?.observedBehavior || 'Trial pending execution.'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="p-3 rounded-lg border-2 border-red-600 bg-red-50 text-red-700 font-bold text-left sm:text-right">
-              <span>SIGNATURE VALIDATED // SECURE SESSION</span>
+          )}
+
+          {/* Section 04: Grounded RAG References */}
+          {includeCitations && (
+            <div className="space-y-3 print-break-inside-avoid">
+              <h3 className="font-display text-xl text-black tracking-wider border-b border-black/10 pb-1 flex items-center justify-between">
+                <span>04. GROUNDED LITERATURE & CITATIONS</span>
+                <span className="text-[10px] font-mono-data text-zinc-400 font-normal">SEC-04</span>
+              </h3>
+              <ul className="space-y-2 text-xs font-mono-data text-zinc-700">
+                <li className="flex items-start gap-2">
+                  <span className="text-red-600 font-bold">▸</span>
+                  <span>
+                    <strong className="text-black">Thinking, Fast and Slow (Daniel Kahneman):</strong> Heuristic compliance under ego
+                    depletion and prospect loss aversion in peer cohorts.
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-600 font-bold">▸</span>
+                  <span>
+                    <strong className="text-black">Dictionary of Body Language (Joe Navarro):</strong> Ventral denial, gaze aversion, and
+                    suprasternal notch pacifying during confrontation.
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-600 font-bold">▸</span>
+                  <span>
+                    <strong className="text-black">In Sheep's Clothing (Dr. George Simon):</strong> Covert aggression and social scapegoating
+                    dynamics in simulated hierarchical groups.
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-600 font-bold">▸</span>
+                  <span>
+                    <strong className="text-black">The Prince (Niccolò Machiavelli):</strong> Realpolitik alliance maneuvering and pre-emptive defection.
+                  </span>
+                </li>
+              </ul>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+
+          {/* Section 05: Sign-Off */}
+          {includeSignOff && (
+            <div className="pt-6 border-t border-black/10 flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs font-mono-data text-zinc-600 gap-4 print-break-inside-avoid">
+              <div>
+                <p className="text-black font-bold">VERIFIED BY RESEARCH ARCHITECTS:</p>
+                <p>Akash Sankar (System Architect) · Alfa (Psychological Advisor)</p>
+              </div>
+              <div className="p-3 rounded-lg border border-red-200 bg-red-50 text-red-700 font-bold text-left sm:text-right">
+                <span>SIGNATURE VALIDATED // SECURE SESSION</span>
+              </div>
+            </div>
+          )}
+        </div>
       )}
 
       {/* Modal: Customize Export Fields */}
       {showExportModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border-2 border-black rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl">
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border-2 border-red-600 rounded-lg max-w-lg w-full p-6 space-y-5 shadow-2xl relative text-black">
             <div className="flex items-center justify-between border-b border-black/10 pb-3">
               <div className="flex items-center gap-2">
                 <Settings className="w-5 h-5 text-red-600" />
@@ -904,7 +906,7 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
               </div>
               <button
                 onClick={() => setShowExportModal(false)}
-                className="p-1 rounded text-zinc-500 hover:text-black cursor-pointer"
+                className="p-1 rounded text-zinc-500 hover:text-black cursor-pointer hover:bg-zinc-100"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -915,12 +917,12 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
             </p>
 
             <div className="space-y-2.5 font-mono-data text-xs">
-              <label className="flex items-center gap-3 p-2.5 rounded-lg border border-black/10 hover:bg-zinc-50 cursor-pointer">
+              <label className="flex items-center gap-3 p-3 rounded-lg border border-black/10 bg-zinc-50 hover:bg-zinc-100 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={includeOverview}
                   onChange={(e) => setIncludeOverview(e.target.checked)}
-                  className="rounded text-red-600 focus:ring-red-500"
+                  className="accent-red-600"
                 />
                 <div>
                   <span className="font-bold text-black block">01. Executive Overview & Hypotheses</span>
@@ -928,25 +930,25 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
                 </div>
               </label>
 
-              <label className="flex items-center gap-3 p-2.5 rounded-lg border border-black/10 hover:bg-zinc-50 cursor-pointer">
+              <label className="flex items-center gap-3 p-3 rounded-lg border border-black/10 bg-zinc-50 hover:bg-zinc-100 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={includeSubjects}
                   onChange={(e) => setIncludeSubjects(e.target.checked)}
-                  className="rounded text-red-600 focus:ring-red-500"
+                  className="accent-red-600"
                 />
                 <div>
-                  <span className="font-bold text-black block">02. Monitored Synthetic Cohort ({caseSubjects.length})</span>
+                  <span className="font-bold text-black block">02. Research Cohort ({caseSubjects.length})</span>
                   <span className="text-[10px] text-zinc-500">Includes subject codes, stress metrics, rebellion risks, and traits.</span>
                 </div>
               </label>
 
-              <label className="flex items-center gap-3 p-2.5 rounded-lg border border-black/10 hover:bg-zinc-50 cursor-pointer">
+              <label className="flex items-center gap-3 p-3 rounded-lg border border-black/10 bg-zinc-50 hover:bg-zinc-100 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={includeExperiments}
                   onChange={(e) => setIncludeExperiments(e.target.checked)}
-                  className="rounded text-red-600 focus:ring-red-500"
+                  className="accent-red-600"
                 />
                 <div>
                   <span className="font-bold text-black block">03. Experimental Protocols & Trials ({caseExperiments.length})</span>
@@ -954,12 +956,12 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
                 </div>
               </label>
 
-              <label className="flex items-center gap-3 p-2.5 rounded-lg border border-black/10 hover:bg-zinc-50 cursor-pointer">
+              <label className="flex items-center gap-3 p-3 rounded-lg border border-black/10 bg-zinc-50 hover:bg-zinc-100 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={includeAnomalies}
                   onChange={(e) => setIncludeAnomalies(e.target.checked)}
-                  className="rounded text-red-600 focus:ring-red-500"
+                  className="accent-red-600"
                 />
                 <div>
                   <span className="font-bold text-black block">04. Correlated Behavioral Anomalies ({caseAnomalies.length})</span>
@@ -967,12 +969,12 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
                 </div>
               </label>
 
-              <label className="flex items-center gap-3 p-2.5 rounded-lg border border-black/10 hover:bg-zinc-50 cursor-pointer">
+              <label className="flex items-center gap-3 p-3 rounded-lg border border-black/10 bg-zinc-50 hover:bg-zinc-100 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={includeCitations}
                   onChange={(e) => setIncludeCitations(e.target.checked)}
-                  className="rounded text-red-600 focus:ring-red-500"
+                  className="accent-red-600"
                 />
                 <div>
                   <span className="font-bold text-black block">05. Grounded Literature Citations</span>
@@ -980,12 +982,12 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
                 </div>
               </label>
 
-              <label className="flex items-center gap-3 p-2.5 rounded-lg border border-black/10 hover:bg-zinc-50 cursor-pointer">
+              <label className="flex items-center gap-3 p-3 rounded-lg border border-black/10 bg-zinc-50 hover:bg-zinc-100 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={includeSignOff}
                   onChange={(e) => setIncludeSignOff(e.target.checked)}
-                  className="rounded text-red-600 focus:ring-red-500"
+                  className="accent-red-600"
                 />
                 <div>
                   <span className="font-bold text-black block">06. Scientific Verification Sign-off</span>
@@ -998,18 +1000,18 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
               <button
                 type="button"
                 onClick={() => setShowExportModal(false)}
-                className="px-4 py-2 border border-black/20 rounded-lg text-xs font-mono-data text-zinc-700 hover:text-black cursor-pointer"
+                className="px-4 py-2 border border-black/15 rounded-lg text-xs font-mono-data text-zinc-600 hover:text-black hover:bg-zinc-100 cursor-pointer"
               >
-                Close
+                CLOSE
               </button>
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={handleExportCSV}
-                  className="px-3.5 py-2 bg-black hover:bg-zinc-800 text-white rounded-lg text-xs font-mono-data font-bold flex items-center gap-1.5 cursor-pointer"
+                  className="px-3.5 py-2 bg-white hover:bg-zinc-100 border border-black/20 text-black rounded-lg text-xs font-mono-data font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
                 >
-                  <FileSpreadsheet className="w-3.5 h-3.5 text-red-500" />
-                  <span>Export CSV</span>
+                  <FileSpreadsheet className="w-3.5 h-3.5 text-red-600" />
+                  <span>EXPORT CSV</span>
                 </button>
                 <button
                   type="button"
@@ -1017,7 +1019,7 @@ export const ReportsModule: React.FC<ReportsModuleProps> = ({
                   className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-mono-data font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
                 >
                   <Download className="w-3.5 h-3.5" />
-                  <span>Export PDF</span>
+                  <span>EXPORT PDF</span>
                 </button>
               </div>
             </div>

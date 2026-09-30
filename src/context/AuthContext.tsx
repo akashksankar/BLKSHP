@@ -29,13 +29,19 @@ interface AuthContextType {
   clearError: () => void;
   authorizedPassKeys: {
     'Akash Sankar': string;
-    'Alfa': string;
+    'Alfa Alias': string;
+    'Alfa'?: string;
   };
 }
 
-const AUTHORIZED_PASS_KEYS = {
+const AUTHORIZED_PASS_KEYS: {
+  'Akash Sankar': string;
+  'Alfa Alias': string;
+  'Alfa': string;
+} = {
   'Akash Sankar': 'omega-protocol-01',
-  'Alfa': 'psyche-eval-02',
+  'Alfa Alias': 'alfa-alias-02',
+  'Alfa': 'alfa-alias-02',
 };
 
 function decodeJwt(token: string | null): JWTSessionData | null {

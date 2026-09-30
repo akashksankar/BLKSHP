@@ -11,9 +11,12 @@ import {
   CheckCircle,
   Sparkles,
   X,
+  Radio,
 } from 'lucide-react';
 import { Experiment, ResearchCase, Subject } from '../../types';
 import { AIThinkingIndicator } from '../common/AIThinkingIndicator';
+import { ExperimentDeploymentOverlay } from './experiments/ExperimentDeploymentOverlay';
+import { ExperimentBuilderWizard } from './experiments/ExperimentBuilderWizard';
 
 interface ExperimentsModuleProps {
   experiments: Experiment[];
@@ -38,6 +41,7 @@ export const ExperimentsModule: React.FC<ExperimentsModuleProps> = ({
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showOutcomeModal, setShowOutcomeModal] = useState(false);
   const [isGeneratingScenario, setIsGeneratingScenario] = useState(false);
+  const [deployingExp, setDeployingExp] = useState<{ id: string; code: string; title: string } | null>(null);
 
   // Outcome recording state
   const [observedBehavior, setObservedBehavior] = useState('');
@@ -239,7 +243,13 @@ export const ExperimentsModule: React.FC<ExperimentsModuleProps> = ({
                 <div className="flex items-center gap-2">
                   {activeExp.status !== 'COMPLETED' && (
                     <button
-                      onClick={() => onExecuteExperiment(activeExp.id)}
+                      onClick={() =>
+                        setDeployingExp({
+                          id: activeExp.id,
+                          code: activeExp.code,
+                          title: activeExp.title,
+                        })
+                      }
                       className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-mono-data font-bold tracking-wide transition-colors flex items-center gap-2 cursor-pointer shadow-sm"
                     >
                       <Play className="w-3.5 h-3.5" />
@@ -608,6 +618,29 @@ export const ExperimentsModule: React.FC<ExperimentsModuleProps> = ({
             </form>
           </div>
         </div>
+      )}
+
+      {/* Section 22: 6-Stage Experiment Builder Wizard */}
+      <ExperimentBuilderWizard
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        subjects={subjects}
+        cases={cases}
+        onDeploy={onCreateExperiment}
+        onGenerateAIScenario={onGenerateAIScenario}
+      />
+
+      {/* Section 23: Cinematic Deployment Overlay */}
+      {deployingExp && (
+        <ExperimentDeploymentOverlay
+          experimentCode={deployingExp.code}
+          experimentTitle={deployingExp.title}
+          onComplete={async () => {
+            const expId = deployingExp.id;
+            setDeployingExp(null);
+            await onExecuteExperiment(expId);
+          }}
+        />
       )}
     </div>
   );

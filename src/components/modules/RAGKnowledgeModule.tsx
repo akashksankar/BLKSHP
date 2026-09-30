@@ -25,6 +25,7 @@ import {
 import { RAGDocument, RAGQueryResult } from '../../types';
 import { AIThinkingIndicator } from '../common/AIThinkingIndicator';
 import { api } from '../../services/api';
+import { RAGVectorSpaceMap } from './rag/RAGVectorSpaceMap';
 
 interface RAGKnowledgeModuleProps {
   documents: RAGDocument[];
@@ -353,6 +354,13 @@ export const RAGKnowledgeModule: React.FC<RAGKnowledgeModuleProps> = ({ document
         </div>
       </div>
 
+      {/* Section 27: 2D Semantic Vector Space Map & RAG Retrieval Pipeline */}
+      <RAGVectorSpaceMap
+        lastQuery={query}
+        retrievedChunks={queryResult?.topChunks}
+        isSearching={isQuerying}
+      />
+
       {/* Query Terminal Console */}
       <div className="bg-white border-2 border-black rounded-xl p-6 space-y-4 shadow-xs">
         <div className="flex items-center justify-between border-b border-black/10 pb-3 text-xs font-mono-data">
@@ -414,7 +422,7 @@ export const RAGKnowledgeModule: React.FC<RAGKnowledgeModuleProps> = ({ document
               type="button"
               onClick={() =>
                 setQuery(
-                  'Humanoid social contagion threshold and herd-collapse dynamics during multi-agent panic.'
+                  'Human social contagion threshold and peer group dynamics during public confrontation.'
                 )
               }
               className="px-2.5 py-1 rounded bg-zinc-100 hover:bg-red-50 text-zinc-800 hover:text-red-700 border border-black/10 transition-colors cursor-pointer"
@@ -646,7 +654,7 @@ export const RAGKnowledgeModule: React.FC<RAGKnowledgeModuleProps> = ({ document
                     <option value="Influence & Manipulation">Influence & Manipulation</option>
                     <option value="Strategic Political Calculus">Strategic Political Calculus</option>
                     <option value="Organizational Psychopathy">Organizational Psychopathy</option>
-                    <option value="Humanoid Social Contagion">Humanoid Social Contagion</option>
+                    <option value="Human Social Contagion">Human Social Contagion</option>
                   </select>
                 </div>
               </div>

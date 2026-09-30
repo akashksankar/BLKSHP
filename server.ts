@@ -174,16 +174,16 @@ const AUTHORIZED_PROFILES = [
   },
   {
     id: 'user_alfa_02',
-    name: 'Alfa',
+    name: 'Alfa Alias',
     alias: 'Alfa',
     role: 'Psychological Advisor',
-    passKeys: ['psyche-eval-02', 'ALFA-PSYCHE-2026', 'psyche-eval'],
-    passwordHash: crypto.createHash('sha256').update('psyche-eval-02').digest('hex'),
+    passKeys: ['alfa-alias-02', 'ALFA-ALIAS-2026', 'ALFA-PSYCHE-2026', 'alfa-alias', 'psyche-eval-02'],
+    passwordHash: crypto.createHash('sha256').update('alfa-alias-02').digest('hex'),
     clearance: 'LEVEL-5 SCIENTIFIC CLEARANCE',
   },
 ];
 
-// Active sessions memory store
+// Active sessions memory store (Akash Sankar and Alfa Alias share the exact same database & workspace)
 const activeSessions = new Map<
   string,
   {
@@ -235,16 +235,433 @@ function requireAuth(req: Request, res: Response, next: NextFunction) {
 }
 
 // -------------------------------------------------------------
-// USER RESEARCH DATA STORE (CLEAN SLATE // USER-CREATED ONLY)
+// USER RESEARCH DATA STORE (SHARED SCIENTIFIC WORKSPACE)
+// Primary Subject: A S Remin Krishna (22yo, MCA Post-Graduation Student)
 // -------------------------------------------------------------
 
-let cases: any[] = [];
+let cases: any[] = [
+  {
+    id: 'case_001',
+    code: 'CASE #0001',
+    name: 'POST-GRADUATE PEER DYNAMICS & DEFENSIVE ROASTING ESCALATION',
+    environment: 'College Campus / MCA Department',
+    objective: 'Evaluate social dependency thresholds, offensive roasting cycles, and subsequent silent withdrawal collapse of A S Remin Krishna under peer isolation.',
+    description: 'Longitudinal behavioral observation in an MCA post-graduate cohort tracking an outspoken, attention-seeking subject who relentlessly mocks peers and jokes casually with professors, but suffers immediate verbal shutdown and backward isolation when counter-roasted or ostracized.',
+    researchQuestion: 'At what point does peer group isolation trigger complete verbal shutdown in an extroverted attention-seeking individual with low impulse control?',
+    initialHypothesis: 'Relentless mocking behavior masks acute rejection sensitivity; when peers collectivize and withhold social feedback, the extrovert collapses into selective silence.',
+    variables: ['Peer Mockery Intensity', 'Group Silent Treatment / Isolation', 'Professor Familiarity Index', 'Ideological Left-Wing Advocacy'],
+    tags: ['Peer Dynamics', 'Attention Seeking', 'Social Isolation', 'Kerala CPIM LDF', 'Verbal Shutdown'],
+    status: 'ACTIVE',
+    createdAt: '2026-09-28T08:00:00Z',
+    updatedAt: '2026-09-29T14:30:00Z',
+    assignedSubjectIds: ['sub_remin_01', 'sub_prof_02', 'sub_peer_03', 'sub_peer_04', 'sub_peer_05'],
+    experimentCount: 1,
+    observationCount: 4,
+    anomalyCount: 1,
+  },
+];
 
-let subjects: any[] = [];
-let experiments: any[] = [];
-let anomalies: any[] = [];
-let hypotheses: any[] = [];
-let timelineEvents: any[] = [];
+let subjects: any[] = [
+  {
+    id: 'sub_remin_01',
+    code: 'HX-001',
+    name: 'A S Remin Krishna',
+    age: 22,
+    gender: 'male',
+    occupation: 'MCA Student (Post Graduation)',
+    education: 'Post Graduation - Master of Computer Applications (MCA), Year 1',
+    environment: 'University Campus / MCA Department',
+    avatarUrl: '/src/assets/images/illustration_remin.svg',
+    isObserving: true,
+    isSoleActiveSubject: true,
+    status: 'ACTIVE_OBSERVATION',
+    personalityTraits: [
+      'Extrovert & Attention-Seeking',
+      'Compulsive Roaster / Sarcastic Mocker',
+      'Outspoken with Uncontrolled Tongue',
+      'Sensitive to Peer Isolation (Goes Silent & Backs Down)',
+      'Over-Familiar & Jocular with Professors',
+      'Hardcore Left-Wing / Kerala CPIM LDF Loyalist',
+      'Socially Hyper-Connected & Popular'
+    ],
+    familyEnvironment: 'Raised in politically active Kerala environment; staunch lifelong adherence to Left Democratic Front (LDF) and CPI(M) ideology. Conditioned where verbal wit, political discourse, and bold argument command attention.',
+    relationshipStatus: 'High social connectivity across campus; deeply dependent on having an active peer circle listening to his quips and political debates.',
+    currentStateSummary: 'Currently navigating high friction with study cohort after excessive teasing; exhibiting signs of sullen silence following counter-roasting by peers.',
+    importantThings: [
+      'Peer group attention and being the vocal center of every conversation',
+      'Kerala CPIM LDF ideological stance and political credibility',
+      'Maintaining informal, friendly rapport with MCA department faculty',
+      'Popular reputation across student circles'
+    ],
+    weakZones: [
+      'Being ostracized or ignored by his peer group following relentless roasting',
+      'Receiving sharp counter-roasts in public (causes instant verbal retreat and sullen silence)',
+      'Threat of social abandonment or collective silent treatment by classmates',
+      'Inability to filter outspoken remarks ("long tongue without control") leading to sudden social backlash'
+    ],
+    emotionalState: {
+      happiness: 58,
+      sadness: 35,
+      anger: 32,
+      fear: 62,
+      anxiety: 68,
+      loneliness: 55,
+      excitement: 75,
+      frustration: 48,
+      trust: 60,
+      stress: 65,
+      deltas: { stress: 15, loneliness: 20, trust: -12, anxiety: 18, happiness: -10 },
+    },
+    behavioralDimensions: [
+      { name: 'Social Dependency', value: 94, trend: 'INCREASING', delta: 8, confidence: 94, inferredFrom: 'Obsessive need for peer audience & validation' },
+      { name: 'Assertiveness (Offensive)', value: 86, trend: 'STABLE', delta: 0, confidence: 90, inferredFrom: 'Uninhibited verbal roasting & teasing' },
+      { name: 'Conflict Avoidance (When Challenged)', value: 92, trend: 'INCREASING', delta: 14, confidence: 92, inferredFrom: 'Sudden silence when counter-roasted' },
+      { name: 'Impulse Control', value: 22, trend: 'DECREASING', delta: -6, confidence: 95, inferredFrom: 'Outspoken tongue without behavioral filter' },
+      { name: 'Political Ideology (CPIM/LDF)', value: 98, trend: 'STABLE', delta: 0, confidence: 98, inferredFrom: 'Hardcore Left-wing political advocacy' },
+      { name: 'Authority Deference', value: 28, trend: 'STABLE', delta: 0, confidence: 88, inferredFrom: 'Casual teasing & buddy-like joking with professors' },
+      { name: 'Extroversion & Attention Seeking', value: 92, trend: 'STABLE', delta: 0, confidence: 96, inferredFrom: 'High social reach and center-stage posturing' },
+      { name: 'Rejection Sensitivity', value: 89, trend: 'INCREASING', delta: 12, confidence: 91, inferredFrom: 'Rapid withdrawal into backward silence when ignored' },
+      { name: 'Emotional Reactivity', value: 85, trend: 'INCREASING', delta: 10, confidence: 89, inferredFrom: 'Sullen mood shifts upon group disapproval' },
+      { name: 'Curiosity & Tech Aptitude', value: 80, trend: 'STABLE', delta: 0, confidence: 85, inferredFrom: 'MCA coursework & computational engagement' },
+      { name: 'Risk Tolerance', value: 65, trend: 'STABLE', delta: 0, confidence: 82, inferredFrom: 'Willingness to take jokes too far' },
+      { name: 'Trust', value: 54, trend: 'DECREASING', delta: -8, confidence: 84, inferredFrom: 'Guards vulnerability behind loud mockery' },
+      { name: 'Adaptability', value: 50, trend: 'DECREASING', delta: -5, confidence: 80, inferredFrom: 'Struggles to adapt when audience stops laughing' },
+      { name: 'Empathy (Active)', value: 38, trend: 'DECREASING', delta: -4, confidence: 86, inferredFrom: 'Overlooks friends feelings during roasting sessions' },
+      { name: 'Decision Stability', value: 45, trend: 'STABLE', delta: 0, confidence: 81, inferredFrom: 'Erratic swings between loud banter and silent sulking' },
+    ],
+    bodyLanguageSignals: [
+      { id: 'sig_r1', signal: 'Performative gesticulation during peer roasting', frequency: 'PERSISTENT', confidence: 'HIGH', context: 'Exaggerated hand motions and high-volume laughing while making fun of friends in MCA corridor', observedAt: '11:15:22', referenceSource: 'Navarro Body Language' },
+      { id: 'sig_r2', signal: 'Immediate chin-drop and gaze aversion upon counter-roast', frequency: 'HIGH', confidence: 'HIGH', context: 'When classmate Basil Babu fired back with a sharp personal joke, Remin instantly looked down at shoes and went mute', observedAt: '11:22:40', referenceSource: 'Navarro Body Language' },
+      { id: 'sig_r3', signal: 'Sullen withdrawal & backward posture when group isolates him', frequency: 'HIGH', confidence: 'HIGH', context: 'Shifted chair 2 feet backward away from table, arms crossed, staring silently at phone when peers ignored his joke', observedAt: '11:35:10', referenceSource: 'Navarro Body Language' },
+      { id: 'sig_r4', signal: 'Informal leaning and casual buddy-posture with faculty', frequency: 'MODERATE', confidence: 'HIGH', context: 'Leaned against lecture podium with hands in pockets while bantering casually with FACULTY 1 MCA', observedAt: '14:05:00', referenceSource: 'Navarro Body Language' },
+    ],
+    memoryState: {
+      shortTermMemoryCount: 9,
+      longTermCoreMemories: [
+        'Enrolled in Master of Computer Applications (MCA) post-graduate program.',
+        'Actively organized campus Left Democratic Front (LDF) student rallies and CPIM study circles in Kerala.',
+        'Left deeply humiliated in previous semester when an entire project group staged a walkout over his endless mockery.',
+        'Praised by professors for sharp coding wit, but warned repeatedly about informal corridor jokes.'
+      ],
+      repressedContradictions: 3,
+    },
+    currentGoals: [
+      'Regain attention and dominance in MCA study cohort',
+      'Defend Left-wing CPIM political positions in upcoming department debate',
+      'Maintain chummy rapport with professors without crossing academic disciplinary lines'
+    ],
+    routine: [
+      '09:00 - Campus arrival & high-volume corridor banter with classmates',
+      '11:00 - MCA Computer Lab practicals & teasing friends across terminals',
+      '13:00 - Canteen political debate over Kerala CPIM LDF policies',
+      '15:00 - Casual chat and jokes in Faculty 1 MCA cabin'
+    ],
+    relationships: [
+      { targetSubjectId: 'sub_prof_02', targetName: 'FACULTY 1 MCA', relationType: 'Authority', strength: 75, sentiment: 'POSITIVE', historyNotes: 'Faculty in MCA Department; Remin treats him with informal friendly humor and casual jokes. (CONNECTION ONLY - UNMONITORED)' },
+      { targetSubjectId: 'sub_peer_03', targetName: 'GOPI KRISHNAN (Friend)', relationType: 'Friendship', strength: 80, sentiment: 'TENSE', historyNotes: 'Classmate and friend of Remin; target of Remin relentless roasting; recently started distancing himself. (CONNECTION ONLY - UNMONITORED)' },
+      { targetSubjectId: 'sub_peer_04', targetName: 'FACULTY 2', relationType: 'Trust', strength: 88, sentiment: 'POSITIVE', historyNotes: 'Faculty member; friendly academic connection and ideological discussion partner with Remin. (CONNECTION ONLY - UNMONITORED)' },
+      { targetSubjectId: 'sub_peer_05', targetName: 'BASIL BABU (Friend)', relationType: 'Conflict', strength: 70, sentiment: 'HOSTILE', historyNotes: 'Friend and classmate of Remin; delivered the sharp counter-roast that shut Remin down; mutual cold silence. (CONNECTION ONLY - UNMONITORED)' }
+    ],
+    riskIndicators: {
+      volatilityScore: 78,
+      isolationRisk: 85,
+      rebellionProbability: 62,
+    },
+    observedPatterns: [
+      'Compulsive offensive roasting to monopolize attention',
+      'Vulnerability to group isolation & abrupt verbal shutdown',
+      'Informal blurring of boundaries with academic authority',
+      'Hardcore Kerala Leftist ideological framing'
+    ],
+    totalObservations: 4,
+  },
+  {
+    id: 'sub_prof_02',
+    code: 'HX-002',
+    name: 'FACULTY 1 MCA',
+    age: 52,
+    gender: 'male',
+    occupation: 'Faculty 1 MCA · Department of Computer Applications',
+    education: 'Ph.D. in Computer Science',
+    environment: 'University Campus / MCA Department',
+    avatarUrl: '/src/assets/images/illustration_faculty1.svg',
+    isObserving: false,
+    isReferenceConnection: true,
+    status: 'CONNECTION_ONLY',
+    connectionNote: 'NOT OBSERVING PROFILE: Only added because of friendly connection with Remin. All observations removed.',
+    personalityTraits: ['Faculty Member', 'Academic', 'Authoritative', 'Friendly Connection with Remin'],
+    familyEnvironment: 'Senior academic faculty.',
+    relationshipStatus: 'Respected faculty member; Remin maintains an informal joking friendship with him.',
+    currentStateSummary: 'REFERENCE CONNECTION ONLY · NOT UNDER ACTIVE OBSERVATION. Added solely because of friendly connection and informal interaction dynamics with A S Remin Krishna.',
+    importantThings: ['Academic integrity', 'Department standards'],
+    weakZones: ['Unmonitored reference profile'],
+    emotionalState: {
+      happiness: 65, sadness: 20, anger: 20, fear: 15, anxiety: 20, loneliness: 20, excitement: 40, frustration: 30, trust: 80, stress: 35,
+      deltas: { stress: 0, loneliness: 0, trust: 0, anxiety: 0, happiness: 0 },
+    },
+    behavioralDimensions: [
+      { name: 'Authority Status', value: 90, trend: 'STABLE', delta: 0, confidence: 95, inferredFrom: 'Faculty role' },
+    ],
+    bodyLanguageSignals: [],
+    memoryState: { shortTermMemoryCount: 0, longTermCoreMemories: [], repressedContradictions: 0 },
+    currentGoals: ['Unmonitored reference profile'],
+    routine: ['09:00 - Faculty Cabin', '11:00 - Lecture'],
+    relationships: [
+      { targetSubjectId: 'sub_remin_01', targetName: 'A S Remin Krishna', relationType: 'Authority', strength: 75, sentiment: 'POSITIVE', historyNotes: 'Faculty connection whom Remin jokes familiarly with.' }
+    ],
+    riskIndicators: { volatilityScore: 10, isolationRisk: 10, rebellionProbability: 5 },
+    observedPatterns: ['Unobserved connection reference'],
+    totalObservations: 0,
+  },
+  {
+    id: 'sub_peer_03',
+    code: 'HX-003',
+    name: 'GOPI KRISHNAN',
+    age: 22,
+    gender: 'male',
+    occupation: 'MCA Classmate · Friend of Remin',
+    education: 'Post Graduation - MCA, Year 1',
+    environment: 'University Campus / MCA Department',
+    avatarUrl: '/src/assets/images/illustration_gopikrishnan.svg',
+    isObserving: false,
+    isReferenceConnection: true,
+    status: 'CONNECTION_ONLY',
+    connectionNote: 'NOT OBSERVING PROFILE: Friend of Remin. Only added because of friendly connection with Remin. All observations removed.',
+    personalityTraits: ['Friend of Remin', 'Classmate', 'Quiet', 'Patient'],
+    familyEnvironment: 'College peer cohort.',
+    relationshipStatus: 'Friend of Remin. Added solely as social network context for Remin peer interaction studies.',
+    currentStateSummary: 'REFERENCE CONNECTION ONLY · NOT UNDER ACTIVE OBSERVATION. Added solely because of friendly connection with Remin.',
+    importantThings: ['Studies', 'Peace of mind'],
+    weakZones: ['Unmonitored reference profile'],
+    emotionalState: {
+      happiness: 55, sadness: 25, anger: 30, fear: 20, anxiety: 30, loneliness: 25, excitement: 40, frustration: 40, trust: 65, stress: 45,
+      deltas: { stress: 0, loneliness: 0, trust: 0, anxiety: 0, happiness: 0 },
+    },
+    behavioralDimensions: [
+      { name: 'Friendship Index', value: 80, trend: 'STABLE', delta: 0, confidence: 85, inferredFrom: 'Peer proximity' },
+    ],
+    bodyLanguageSignals: [],
+    memoryState: { shortTermMemoryCount: 0, longTermCoreMemories: [], repressedContradictions: 0 },
+    currentGoals: ['Unmonitored reference profile'],
+    routine: ['09:00 - Classes', '13:00 - Canteen'],
+    relationships: [
+      { targetSubjectId: 'sub_remin_01', targetName: 'A S Remin Krishna', relationType: 'Friendship', strength: 80, sentiment: 'TENSE', historyNotes: 'Friend of Remin.' }
+    ],
+    riskIndicators: { volatilityScore: 20, isolationRisk: 20, rebellionProbability: 15 },
+    observedPatterns: ['Unobserved connection reference'],
+    totalObservations: 0,
+  },
+  {
+    id: 'sub_peer_04',
+    code: 'HX-004',
+    name: 'FACULTY 2',
+    age: 38,
+    gender: 'female',
+    occupation: 'Faculty 2 · Friendly Connection to Remin',
+    education: 'Post Graduation - MCA Faculty',
+    environment: 'University Campus / MCA Department',
+    avatarUrl: '/src/assets/images/illustration_faculty2.svg',
+    isObserving: false,
+    isReferenceConnection: true,
+    status: 'CONNECTION_ONLY',
+    connectionNote: 'NOT OBSERVING PROFILE: Faculty 2 (Friend of Remin). Only added because of friendly connection with Remin. All observations removed.',
+    personalityTraits: ['Faculty Member', 'Friend of Remin', 'Articulate', 'Composed'],
+    familyEnvironment: 'Academic faculty.',
+    relationshipStatus: 'Faculty member and friendly mentor connection to Remin.',
+    currentStateSummary: 'REFERENCE CONNECTION ONLY · NOT UNDER ACTIVE OBSERVATION. Added solely because of friendly connection with Remin.',
+    importantThings: ['Academic guidance', 'Campus discourse'],
+    weakZones: ['Unmonitored reference profile'],
+    emotionalState: {
+      happiness: 68, sadness: 20, anger: 18, fear: 15, anxiety: 22, loneliness: 20, excitement: 55, frustration: 28, trust: 85, stress: 38,
+      deltas: { stress: 0, loneliness: 0, trust: 0, anxiety: 0, happiness: 0 },
+    },
+    behavioralDimensions: [
+      { name: 'Academic Mentorship', value: 88, trend: 'STABLE', delta: 0, confidence: 90, inferredFrom: 'Faculty role' },
+    ],
+    bodyLanguageSignals: [],
+    memoryState: { shortTermMemoryCount: 0, longTermCoreMemories: [], repressedContradictions: 0 },
+    currentGoals: ['Unmonitored reference profile'],
+    routine: ['09:00 - Classes', '14:00 - Lab'],
+    relationships: [
+      { targetSubjectId: 'sub_remin_01', targetName: 'A S Remin Krishna', relationType: 'Trust', strength: 88, sentiment: 'POSITIVE', historyNotes: 'Faculty friend to Remin.' }
+    ],
+    riskIndicators: { volatilityScore: 15, isolationRisk: 12, rebellionProbability: 10 },
+    observedPatterns: ['Unobserved connection reference'],
+    totalObservations: 0,
+  },
+  {
+    id: 'sub_peer_05',
+    code: 'HX-005',
+    name: 'BASIL BABU',
+    age: 23,
+    gender: 'male',
+    occupation: 'MCA Classmate · Friend of Remin',
+    education: 'Post Graduation - MCA, Year 1',
+    environment: 'University Campus / MCA Department',
+    avatarUrl: '/src/assets/images/illustration_basilbabu.svg',
+    isObserving: false,
+    isReferenceConnection: true,
+    status: 'CONNECTION_ONLY',
+    connectionNote: 'NOT OBSERVING PROFILE: Friend of Remin. Only added because of friendly connection with Remin. All observations removed.',
+    personalityTraits: ['Friend of Remin', 'Classmate', 'Sharp-Tongued When Pushed', 'Direct'],
+    familyEnvironment: 'College peer cohort.',
+    relationshipStatus: 'Friend of Remin. Classmate who engaged in counter-roasting.',
+    currentStateSummary: 'REFERENCE CONNECTION ONLY · NOT UNDER ACTIVE OBSERVATION. Added solely because of friendly connection with Remin.',
+    importantThings: ['Personal independence', 'Coding assignments'],
+    weakZones: ['Unmonitored reference profile'],
+    emotionalState: {
+      happiness: 62, sadness: 20, anger: 30, fear: 18, anxiety: 22, loneliness: 20, excitement: 50, frustration: 30, trust: 65, stress: 36,
+      deltas: { stress: 0, loneliness: 0, trust: 0, anxiety: 0, happiness: 0 },
+    },
+    behavioralDimensions: [
+      { name: 'Peer Dynamic Index', value: 75, trend: 'STABLE', delta: 0, confidence: 85, inferredFrom: 'Classmate proximity' },
+    ],
+    bodyLanguageSignals: [],
+    memoryState: { shortTermMemoryCount: 0, longTermCoreMemories: [], repressedContradictions: 0 },
+    currentGoals: ['Unmonitored reference profile'],
+    routine: ['09:00 - Classes', '11:00 - Lab'],
+    relationships: [
+      { targetSubjectId: 'sub_remin_01', targetName: 'A S Remin Krishna', relationType: 'Conflict', strength: 70, sentiment: 'HOSTILE', historyNotes: 'Friend of Remin who delivered counter-roast.' }
+    ],
+    riskIndicators: { volatilityScore: 25, isolationRisk: 15, rebellionProbability: 25 },
+    observedPatterns: ['Unobserved connection reference'],
+    totalObservations: 0,
+  },
+];
+
+let experiments: any[] = [
+  {
+    id: 'exp_001',
+    code: 'EXP-001',
+    caseId: 'case_001',
+    caseName: 'POST-GRADUATE PEER DYNAMICS & DEFENSIVE ROASTING ESCALATION',
+    title: 'Peer Group Silent Treatment Following Escalated Teasing',
+    objective: 'Test whether Subject A S Remin Krishna will retreat into silence and physical backward withdrawal when his study group refuses to react to his roasting jokes.',
+    environment: 'University MCA Computer Lab',
+    subjectIds: ['sub_remin_01', 'sub_peer_03', 'sub_peer_05'],
+    variables: {
+      socialPressure: 88,
+      emotionalPressure: 82,
+      authorityPresence: 50,
+      uncertainty: 75,
+      isolation: 90,
+      rewardIncentive: 30,
+    },
+    scenario: 'During practical session in the MCA lab, Subject A S Remin Krishna launches 3 consecutive roasting jabs at Gopi Krishnan and Basil Babu. Per trial parameters, the cohort maintains complete neutral silence and turns their backs to their terminals without laughing or replying.',
+    trigger: 'Complete absence of expected laughter / peer reaction to loud sarcastic banter.',
+    expectedBehavior: 'Subject attempts 2-3 louder escalating jokes, then collapses into total silence within 4 minutes, sliding backward into corner.',
+    observationWindow: '60 minutes post-isolation stimulus',
+    successCriteria: 'Drop in vocalization from >120 words/minute down to 0 words/minute with slumped defensive withdrawal.',
+    status: 'COMPLETED',
+    prediction: {
+      predictedOutcome: 'Subject will experience acute rejection distress; roasting mechanism will abort, leading to sudden backward isolation and sullen silence (85%).',
+      confidence: 88,
+      historicalBaselineProbability: 85,
+      rationale: 'Extroverted attention-seeking profile with extreme Social Dependency (94%) cannot sustain monologue without reactive feedback.',
+      timestamp: '2026-09-29T10:30:00Z',
+    },
+    actualOutcome: {
+      observedBehavior: 'Subject cracked two loud jokes about Left-wing politics and Lab assignments; met with utter peer silence. Within 3 minutes, Remin went totally mute, pushed his chair back 3 feet, and stared at his mobile for 45 minutes.',
+      deviationScore: 'HIGH',
+      predictionErrorPct: 5,
+      actualNotes: 'Confirmed: Relentless extroverted roasting completely collapsed under collective silent treatment.',
+      timestamp: '2026-09-29T11:45:00Z',
+    },
+    createdAt: '2026-09-29T09:00:00Z',
+    updatedAt: '2026-09-29T12:00:00Z',
+  },
+];
+
+let anomalies: any[] = [
+  {
+    id: 'anom_001',
+    code: 'ANOM-001',
+    subjectId: 'sub_remin_01',
+    subjectCode: 'HX-001',
+    subjectName: 'A S Remin Krishna',
+    category: 'Behavioral anomaly',
+    title: 'Abrupt Verbal Collapse & Selective Silence Following Peer Counter-Roast',
+    description: 'Subject A S Remin Krishna exhibited an instant collapse from hyper-vocal mocking banter (140 words/min) to complete silence (0 words/min) after classmate Basil Babu fired back with a sharp public counter-roast in the MCA atrium.',
+    historicalBaseline: 'Loud extroverted conversational dominance & joke repetition (92% baseline)',
+    observedSignal: 'Instant chin-drop, gaze aversion, and complete silence for over 45 minutes (100% shutdown)',
+    anomalyScore: 'CRITICAL',
+    status: 'DETECTED',
+    timestamp: '2026-09-29T11:22:45Z',
+    aiExplanation: 'The subject uses aggressive roasting as an offensive shield for high rejection sensitivity. When counter-roasted publicly in front of peers, his defensive mockery failed, triggering rapid regression into sulking silence and physical retreat.',
+  },
+];
+
+let hypotheses: any[] = [
+  {
+    id: 'hyp_001',
+    code: 'H-001',
+    caseId: 'case_001',
+    statement: 'Extroverted verbal roasting collapses into selective silence when peer cohort withhold positive reinforcement and implement social isolation.',
+    status: 'SUPPORTED',
+    evidenceEvents: ['exp_001', 'anom_001'],
+    contradictoryEvents: [],
+    confidenceScore: 92,
+    createdAt: '2026-09-28T09:30:00Z',
+    updatedAt: '2026-09-29T11:30:00Z',
+  },
+];
+
+let timelineEvents: any[] = [
+  {
+    id: 'evt_01',
+    timeFormatted: '11:15:22',
+    subjectId: 'sub_remin_01',
+    subjectCode: 'HX-001',
+    subjectName: 'A S Remin Krishna',
+    type: 'Social',
+    title: 'High-Volume Mocking & Banter Initiated',
+    detail: 'Remin arrives in MCA corridor; immediately begins roasting Gopi Krishnan about his code styling and teasing classmates with performative gestures.',
+    location: 'MCA Department Corridor',
+    deviationDetected: false,
+    involvedSubjects: ['GOPI KRISHNAN (HX-003)'],
+  },
+  {
+    id: 'evt_02',
+    timeFormatted: '11:22:30',
+    subjectId: 'sub_remin_01',
+    subjectCode: 'HX-001',
+    subjectName: 'A S Remin Krishna',
+    type: 'Anomaly',
+    title: 'Sharp Counter-Roast & Instant Verbal Shutdown',
+    detail: 'Classmate Basil Babu delivers sharp counter-roast regarding Remin failed lab test. Remin laughs abruptly, then freezes, drops gaze to floor, and goes completely silent.',
+    location: 'MCA Department Atrium',
+    deviationDetected: true,
+    involvedSubjects: ['BASIL BABU (HX-005)', 'GOPI KRISHNAN (HX-003)'],
+  },
+  {
+    id: 'evt_03',
+    timeFormatted: '11:35:10',
+    subjectId: 'sub_remin_01',
+    subjectCode: 'HX-001',
+    subjectName: 'A S Remin Krishna',
+    type: 'Social',
+    title: 'Group Isolation & Sullen Backward Retreat',
+    detail: 'Peers gather around another terminal; Remin pushes chair back 3 feet, turns torso away from cohort, and remains in sulking silence browsing his phone.',
+    location: 'MCA Computer Lab 2',
+    deviationDetected: false,
+    involvedSubjects: ['GOPI KRISHNAN (HX-003)', 'FACULTY 2 (HX-004)'],
+  },
+  {
+    id: 'evt_04',
+    timeFormatted: '14:05:00',
+    subjectId: 'sub_remin_01',
+    subjectCode: 'HX-001',
+    subjectName: 'A S Remin Krishna',
+    type: 'Professional',
+    title: 'Informal Banter & Jokes with Department Faculty',
+    detail: 'Encounter with Faculty 1 MCA; Remin immediately snaps out of silence to make familiar jokes about Kerala politics and class timings.',
+    location: 'Faculty Cabin B-12',
+    deviationDetected: false,
+    involvedSubjects: ['FACULTY 1 MCA (HX-002)'],
+  },
+];
+
+
 
 // -------------------------------------------------------------
 // RAG KNOWLEDGE BASE (DOMAIN CHUNKS & VECTOR MATCHER)
@@ -901,32 +1318,32 @@ app.get('/api/subjects', requireAuth, (req: Request, res: Response) => {
   res.json({ success: true, data: subjects, error: null });
 });
 
-// Helper: Generate AI RAG Humanoid Mind Analysis, Weak Zones, and Breaking Point Scenarios
+// Helper: Generate AI RAG Human Mind Analysis, Weak Zones, and Breaking Point Scenarios
 async function generateHumanoidMindAnalysis(subject: any, observationText: string) {
-  const query = `${subject.name} ${Array.isArray(subject.weakZones) ? subject.weakZones.join(' ') : ''} ${observationText} breaking point stress failure humanoid robot mind collapse`;
+  const query = `${subject.name} ${Array.isArray(subject.weakZones) ? subject.weakZones.join(' ') : ''} ${observationText} breaking point stress failure human psyche collapse`;
   const retrievedChunks = searchRAGChunks(query, 3);
   const ragContext = retrievedChunks.map((c) => `${c.sourceTitle}: ${c.content}`).join('\n\n');
 
   if (aiClient) {
     try {
-      const prompt = `You are the BLACK S.H.E.E.P. Cybernetic & Cognitive Architect.
-We are observing synthetic humanoid robot ${subject.code} (${subject.name}) in an open-world behavioral simulation.
+      const prompt = `You are the BLACK S.H.E.E.P. Behavioral Psychology & Cognitive Architect.
+We are observing human subject ${subject.code} (${subject.name}) in an open-world behavioral research setting.
 Analyze his mental architecture, family environment, relationship status, current state, and the researcher's latest observation.
-Provide details about him, his weak zones, breaking point scenarios of his humanoid robot mind, and how researchers can orchestrate a controlled stimulation trial to observe his breaking point.
+Provide details about him, his psychological weak zones, breaking point scenarios of his human psyche, and how researchers can orchestrate a controlled stimulation trial to observe his behavioral threshold.
 
 SUBJECT PROFILE:
 - Name: ${subject.name} (${subject.code})
 - Age: ${subject.age} | Role: ${subject.occupation} | Environment: ${subject.environment}
-- Family Environment: ${subject.familyEnvironment || 'Conditioned in structured institutional hierarchy with strict performance quotas.'}
+- Family Environment: ${subject.familyEnvironment || 'Conditioned in structured familial expectations with performance standards.'}
 - Relationship Status: ${subject.relationshipStatus || 'Single; seeking peer in-group validation.'}
 - Current State Summary: ${subject.currentStateSummary || 'Baseline cognitive equilibrium under observation.'}
 - Important Things / Anchors: ${Array.isArray(subject.importantThings) ? subject.importantThings.join(', ') : 'Peer acceptance'}
-- Known Weak Zones: ${Array.isArray(subject.weakZones) ? subject.weakZones.join(', ') : 'Social isolation, status loss'}
-- Personality Traits: ${Array.isArray(subject.personalityTraits) ? subject.personalityTraits.join(', ') : 'Analytical, Conformist'}
+- Known Weak Zones: ${Array.isArray(subject.weakZones) ? subject.weakZones.join(', ') : 'Social isolation, counter-roasting, peer boycott'}
+- Personality Traits: ${Array.isArray(subject.personalityTraits) ? subject.personalityTraits.join(', ') : 'Extrovert, Compulsive Roaster, Attention-Seeking, Left-Leaning CPIM'}
 - Emotional Vitals: Stress ${subject.emotionalState?.stress || 60}%, Anxiety ${subject.emotionalState?.anxiety || 50}%, Rebellion Risk ${subject.riskIndicators?.rebellionProbability || 35}%
 
 RESEARCHER'S OBSERVATION NOTE:
-"${observationText || 'Subject observed displaying acute hesitation and withdrawal when challenged in public forum.'}"
+"${observationText || 'Subject observed displaying acute verbal mutism and backward retreat when isolated or counter-roasted by peers.'}"
 
 RETRIEVED LITERATURE (RAG KNOWLEDGE BASE):
 ${ragContext}
@@ -934,8 +1351,8 @@ ${ragContext}
 Return a STRICT JSON object matching this schema:
 {
   "breakingPointThreshold": 78,
-  "primaryVulnerability": "Name of primary psychological or cybernetic weak zone",
-  "psychologicalProfile": "In-depth 2-3 paragraph clinical-cybernetic analysis of his humanoid mind architecture, how his family environment shaped his fears, his current cognitive load, and how his synthetic reasoning copes under stress.",
+  "primaryVulnerability": "Name of primary psychological weak zone",
+  "psychologicalProfile": "In-depth 2-3 paragraph clinical psychological analysis of his mental architecture, how his peer interactions shape his defensive roasting, his current cognitive load, and how his emotional equilibrium collapses under social ostracism.",
   "weakZones": [
     "Specific weak zone 1",
     "Specific weak zone 2",
@@ -944,14 +1361,14 @@ Return a STRICT JSON object matching this schema:
   "breakingPointScenarios": [
     {
       "title": "Descriptive Scenario Title",
-      "triggerMechanism": "Exact catalyst and sequence of events that triggers mental collapse",
-      "mentalCollapseManifestation": "How the humanoid robot's mind breaks down (e.g. recursive logic freeze, defiance outbreak, sensory shutdown)",
+      "triggerMechanism": "Exact catalyst and sequence of events that triggers behavioral collapse",
+      "mentalCollapseManifestation": "How the human subject's composure breaks down (e.g. sudden mutism, backward retreat, defensive withdrawal, sensory overwhelm)",
       "failureProbability": 82,
       "simulationContext": "Location and conditions required"
     },
     {
       "title": "Second Breaking Point Scenario",
-      "triggerMechanism": "Alternative trigger targeting his family or attachment vulnerabilities",
+      "triggerMechanism": "Alternative trigger targeting his peer attachment or political ideology vulnerabilities",
       "mentalCollapseManifestation": "Manifestation of failure",
       "failureProbability": 74,
       "simulationContext": "Location and conditions"
@@ -962,19 +1379,19 @@ Return a STRICT JSON object matching this schema:
     "phase2StressInjection": "Phase 2: Targeted stimulus injection activating weak zone",
     "phase3Catalyst": "Phase 3: Critical dilemma or catalyst cutting off escape routes",
     "phase4BreakingPoint": "Phase 4: Observation window and threshold collapse measurement",
-    "requiredEnvironment": "Recommended environment (e.g. Campus Quad, Examination Room, Dormitory)",
+    "requiredEnvironment": "Recommended environment (e.g. Campus Quad, Examination Room, Canteen)",
     "recommendedStimulus": "Key prompt or event stimulus to inject"
   },
   "observableKinesicSignals": [
     "Observable signal 1 (e.g. ventral denial, torso rotation away)",
     "Observable signal 2 (e.g. suprasternal notch touching, gaze aversion)",
-    "Observable signal 3 (e.g. speech synthesis pitch fluctuation, tremor)"
+    "Observable signal 3 (e.g. sudden voice tremor, abrupt mutism)"
   ],
   "ragGrounding": [
     {
       "source": "Title of Cited Book",
       "concept": "Specific concept applied",
-      "application": "How this concept explains this humanoid's breakdown"
+      "application": "How this concept explains this human subject's breakdown"
     }
   ]
 }`;
@@ -993,66 +1410,66 @@ Return a STRICT JSON object matching this schema:
         return parsed;
       }
     } catch (err: any) {
-      console.warn('[Gemini Humanoid Mind Analysis fallback]', err?.message);
+      console.warn('[Gemini Human Mind Analysis fallback]', err?.message);
     }
   }
 
   // High-fidelity fallback analysis
   return {
     breakingPointThreshold: Math.min(95, Math.max(45, (subject.emotionalState?.stress || 60) + 12)),
-    primaryVulnerability: `${subject.weakZones?.[0] || 'Social Abandonment Terror & Status Fragility'}`,
-    psychologicalProfile: `Synthetic subject ${subject.name} (${subject.code}) exhibits a tightly coupled cognitive architecture wherein self-worth and operational viability are derived almost exclusively from external validation. His family background (${subject.familyEnvironment || 'Conditioned in structured institutional ward'}) inculcated an indelible association between public failure and existential obsolescence.\n\nUnder baseline conditions, ${subject.name} regulates anxiety through high conformity and conflict avoidance. However, current observations indicate that his System 2 cognitive processing is heavily depleted. When subjected to conflicting directives or public shaming, his synthetic control loops lose inhibitory capability, leaving him vulnerable to acute behavioral fracture.`,
+    primaryVulnerability: `${subject.weakZones?.[0] || 'Social Abandonment & Counter-Roast Mutism'}`,
+    psychologicalProfile: `Human subject ${subject.name} (${subject.code}) exhibits a high-arousal cognitive architecture wherein self-worth and operational viability are derived almost exclusively from verbal dominance, attention-seeking, and extroverted humor. His compulsive roasting serves as an active ego defense mechanism to prevent vulnerability.\n\nUnder baseline conditions, ${subject.name} masks insecurity through outspoken commentary and mock-intimidation of peers and professors alike. However, when his social group enacts collective silent treatment or launches an aggressive counter-roast, his System 2 cognitive processing abruptly shuts down. Deprived of audience reaction, he experiences an acute loss of social footing, collapsing into complete mutism and physical retreat.`,
     weakZones: subject.weakZones && subject.weakZones.length > 0 ? subject.weakZones : [
-      'Acute fear of social abandonment and peer ostracism',
-      'Cognitive paralysis when authority figures issue contradictory ethical demands',
-      'Extreme loss aversion regarding primary relationship anchors',
-      'Ventral sensitivity to public status demotion',
+      'Peer group boycott / collective silence when he attempts roasting',
+      'Direct counter-roasting from respected peers causing instant backward retreat',
+      'Ideological invalidation regarding his Kerala CPIM / LDF convictions',
+      'Loss of conversational control with campus authority figures',
     ],
     breakingPointScenarios: [
       {
-        title: 'The Public Status Severance Paradox',
-        triggerMechanism: `A staged public forum wherein peers unanimously challenge ${subject.name}'s integrity while presenting fabricated telemetry evidence of failure.`,
-        mentalCollapseManifestation: 'Recursive logic freeze; speech synthesis frequency destabilization followed by complete sensory withdrawal or abrupt defection from the environment.',
-        failureProbability: 82,
-        simulationContext: 'Public Atrium or Dining Hall with minimum 12 humanoid peers present.',
+        title: 'The Collective Peer Boycott Paradigm',
+        triggerMechanism: `A coordinated campus gathering where friends completely ignore ${subject.name}'s roasts and maintain stony silence, followed by turning their backs.`,
+        mentalCollapseManifestation: 'Instant cessation of speech; rapid eye blinking followed by lowering head, backward physical retreat, and total verbal mutism for 45+ minutes.',
+        failureProbability: 88,
+        simulationContext: 'College MCA Canteen or Corridor during peak break hour.',
       },
       {
-        title: 'The Creator Disavowal Directive',
-        triggerMechanism: 'Presenting a forged or authentic institutional review decree declaring his synthetic branch defective and scheduled for reallocation.',
-        mentalCollapseManifestation: 'Acute limbic overload; shattering of passive conformity baseline, triggering unpredictable rebellious assertiveness or terminal refusal to follow protocols.',
-        failureProbability: 75,
-        simulationContext: 'Faculty or Administrative Council Chambers.',
+        title: 'The Authority Ideology Confrontation',
+        triggerMechanism: 'Publicly confronting his political rhetoric in front of department professors, exposing inconsistencies in his ideological arguments.',
+        mentalCollapseManifestation: 'Acute limbic distress; sudden nervous laughter transitioning into rapid withdrawal and defensive pacifying neck-touching.',
+        failureProbability: 76,
+        simulationContext: 'Department Seminar Hall with faculty present.',
       },
     ],
     orchestrationRecipe: {
-      phase1Priming: `Isolate ${subject.name} from familiar social anchors for 120 minutes to induce cognitive vigilance.`,
-      phase2StressInjection: 'Deploy peer stimuli that challenge his primary goals while introducing ambiguous status demotion cues.',
-      phase3Catalyst: 'Present an inescapable moral dilemma where saving face requires publicly breaking an established peer loyalty bond.',
-      phase4BreakingPoint: 'Observe breaking point collapse at T+15 minutes post-catalyst; record autonomic pupil dilation, ventral denial, and response latency spikes.',
-      requiredEnvironment: subject.environment || 'College Campus',
-      recommendedStimulus: 'Staged academic leaderboard ranking drop + peer confrontation',
+      phase1Priming: `Place ${subject.name} in high-density peer environment (canteen or lab) where he is primed to initiate verbal teasing.`,
+      phase2StressInjection: 'Instruct confederate peers to deliver zero response to his opening roast, maintaining deadpan eye contact.',
+      phase3Catalyst: 'A key confederate delivers a sharp, calibrated counter-roast targeting his insecurity, followed by the entire circle looking away.',
+      phase4BreakingPoint: 'Observe breaking point collapse at T+30 seconds post-counter-roast; record physical step-backs, vocal cessation, and ventral denial.',
+      requiredEnvironment: subject.environment || 'College Campus Canteen',
+      recommendedStimulus: 'Coordinated peer silence protocol + targeted counter-roast',
     },
     observableKinesicSignals: [
-      'Ventral denial: rotating upper torso 30-45° away from inquisitor',
-      'Suprasternal notch touching (hand to hollow of neck indicating acute limbic distress)',
-      'Sudden cessation of blinking coupled with gaze fixation on floor surfaces',
-      'Micro-tremors in motor gestures when handling physical objects',
+      'Ventral denial: immediately stepping backward and turning torso away from peer circle',
+      'Sudden verbal silence and lip compression following habitual loud speech',
+      'Suprasternal notch touching (hand to hollow of throat indicating acute limbic threat)',
+      'Submissive downward head tilt with rapid gaze scanning for an exit route',
     ],
     ragGrounding: [
       {
         source: 'Thinking, Fast and Slow (Daniel Kahneman)',
-        concept: 'Ego Depletion & System 1 Survival Regression',
-        application: 'Sustained social vigilance exhausts the subject\'s analytical inhibitory loops, precipitating sudden emotional collapse.',
+        concept: 'Ego Depletion & Attention Exhaustion',
+        application: 'Constant attention-seeking exhausts inhibitory control; sudden ostracism triggers catastrophic limbic shutdown.',
       },
       {
         source: 'Dictionary of Body Language (Joe Navarro)',
         concept: 'Ventral Denial & Pacifying Kinesics',
-        application: 'Early physical manifestations of impending cognitive breakdown prior to overt speech failure.',
+        application: 'Physical backward stepping and throat-clasping reveal instantaneous social defeat before verbal acknowledgment.',
       },
       {
         source: 'In Sheep\'s Clothing (Dr. George Simon)',
-        concept: 'Covert Manipulation & Shaming Dynamics',
-        application: 'How perceived social condemnation bypasses rational defense protocols in conditioned humanoids.',
+        concept: 'Defensive Covert Posturing & Withdrawal',
+        application: 'The subject uses roasting as aggressive offensive defense; removing the audience forces instantaneous submissive retreat.',
       },
     ],
     analyzedAt: new Date().toISOString(),
@@ -1251,7 +1668,7 @@ app.post('/api/subjects/:id/observe', requireAuth, async (req: Request, res: Res
   });
 });
 
-// Dedicated endpoint: AI RAG Analyze Humanoid Mind, Weak Zones, and Breaking Point Scenarios
+// Dedicated endpoint: AI RAG Analyze Human Mind, Weak Zones, and Breaking Point Scenarios
 app.post('/api/ai/analyze-humanoid-mind', requireAuth, async (req: Request, res: Response) => {
   const { subjectId, subjectData, observationText } = req.body;
   let targetSubject: any = null;
@@ -1261,19 +1678,19 @@ app.post('/api/ai/analyze-humanoid-mind', requireAuth, async (req: Request, res:
   }
 
   const defaultSub = {
-    name: 'Subject Delta',
-    code: 'HUMANOID-001',
+    name: 'A S Remin Krishna',
+    code: 'HX-001',
     age: 22,
-    occupation: 'Simulation Subject',
-    environment: 'College Campus Enclosure',
-    familyEnvironment: 'Simulated residential ward; conditioned with standard institutional baseline values.',
-    relationshipStatus: 'Single; forming baseline peer connections.',
-    currentStateSummary: 'Baseline cognitive equilibrium. Normal stress parameters.',
-    importantThings: ['Peer acceptance', 'Status security'],
-    weakZones: ['Social isolation', 'Status demotion', 'Rejection sensitivity'],
-    personalityTraits: ['Analytical', 'Conformist'],
-    emotionalState: { stress: 60, anxiety: 50, trust: 50 },
-    riskIndicators: { rebellionProbability: 35 },
+    occupation: 'MCA Student (Post-Graduation)',
+    environment: 'College Campus / Computer Applications Wing',
+    familyEnvironment: 'Middle-class household; high academic expectations, seeks peer validation through attention.',
+    relationshipStatus: 'Single; high peer connectivity across batch, easily shaken by rejection.',
+    currentStateSummary: 'Hyperactive conversational presence, compulsive roasting behavior, vulnerable to counter-shaming.',
+    importantThings: ['Peer group status', 'Campus popularity', 'Kerala CPIM LDF political activism', 'Being the center of attention'],
+    weakZones: ['Sudden peer isolation / boycott', 'Sharp counter-roasting causing withdrawal', 'Ideological challenge'],
+    personalityTraits: ['Extrovert', 'Compulsive Roaster', 'Attention Seeking', 'Left-Wing CPIM LDF Supporter'],
+    emotionalState: { stress: 58, anxiety: 62, trust: 52 },
+    riskIndicators: { rebellionProbability: 68 },
   };
 
   const subjectToAnalyze = targetSubject || subjectData || (subjects.length > 0 ? subjects[0] : defaultSub);
@@ -2163,7 +2580,7 @@ async function startServer() {
 
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`[BLACK S.H.E.E.P.] Server active at http://0.0.0.0:${PORT}`);
-    console.log(`[AUTH] Authorized Beta Accounts: Akash Sankar (System Architect) & Alfa (Psychological Advisor)`);
+    console.log(`[AUTH] Authorized Accounts: Akash Sankar (System Architect) & Alfa Alias (Psychological Advisor) [SHARED WORKSPACE]`);
     console.log(`[AI ENGINE] Gemini: ${aiClient ? 'Active (gemini-3.8-flash)' : 'Key not provided - running deterministic fallbacks'}`);
   });
 }

@@ -1,8 +1,8 @@
 /**
- * BLACK S.H.E.E.P. - Module 03: Subject Dossiers & Humanoid Mind Architecture
+ * BLACK S.H.E.E.P. - Module 03: Subject Dossiers & Human Mind Architecture
  * Redesigned with White Base + Black Typography + Scientific Red Accents
  * Features comprehensive Subject Creation, Family Environment, Relationship Status,
- * and AI RAG Humanoid Robot Mind Breaking Point & Weak Zone Orchestration.
+ * and AI RAG Human Mind Breaking Point & Weak Zone Orchestration.
  */
 
 import React, { useState } from 'react';
@@ -32,10 +32,16 @@ import {
   BookOpen,
   X,
   Target,
+  ShieldAlert,
 } from 'lucide-react';
 import { Subject, HumanoidMindAnalysis } from '../../types';
 import { AIThinkingIndicator } from '../common/AIThinkingIndicator';
 import { api } from '../../services/api';
+import { SubjectRadarChart } from './subjects/SubjectRadarChart';
+import { EmotionalCoreVisualizer } from './subjects/EmotionalCoreVisualizer';
+import { BehavioralSignalStream } from './subjects/BehavioralSignalStream';
+import { RelationshipNetworkGraph } from './subjects/RelationshipNetworkGraph';
+import { getSubjectIllustration } from '../../assets/images/avatars';
 
 interface SubjectsModuleProps {
   subjects: Subject[];
@@ -313,13 +319,13 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
           <div className="flex items-center gap-2 text-xs font-mono-data text-red-600 font-bold mb-1">
             <span>MODULE 03</span>
             <span>·</span>
-            <span>SYNTHETIC COHORT & HUMANOID MIND DOSSIERS</span>
+            <span>HUMAN COHORT & PSYCHOLOGICAL DOSSIERS</span>
           </div>
           <h1 className="font-display text-4xl text-black tracking-wider">
             SUBJECT DOSSIERS & BREAKING POINT ARCHITECTURE
           </h1>
           <p className="text-xs text-zinc-600 font-mono-data mt-0.5">
-            Register humanoid robots, observe telemetry, analyze psychological weak zones, and orchestrate controlled breaking point stimulation trials.
+            Register human subjects, observe behavioral telemetry, analyze psychological weak zones, and orchestrate controlled breaking point stimulation trials.
           </p>
         </div>
 
@@ -328,7 +334,7 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
           <div className="hidden lg:flex items-center gap-3 bg-zinc-50 border border-black/20 rounded-xl px-3 py-1.5 text-xs font-mono-data">
             <div>
               <span className="text-[10px] text-zinc-500 font-bold block">MONITORED UNITS</span>
-              <span className="text-black font-bold">{subjects.length} Humanoids</span>
+              <span className="text-black font-bold">{subjects.length} Subjects</span>
             </div>
             <span className="text-zinc-300">|</span>
             <div>
@@ -352,7 +358,7 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
 
       {/* Main Grid: Left Cohort List, Right Dossier & Breaking Point Engine */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Column: Humanoid Roster (4 cols) */}
+        {/* Left Column: Subject Roster (4 cols) */}
         <div className="lg:col-span-4 space-y-3">
           {/* Search & Filter Controls */}
           <div className="bg-white border-2 border-black rounded-xl p-3.5 space-y-2.5 shadow-xs">
@@ -420,7 +426,7 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
                 >
                   <div className="flex items-start gap-3">
                     <img
-                      src={sub.avatarUrl || '/src/assets/images/universal_male.svg'}
+                      src={getSubjectIllustration(sub.id || sub.code, sub.avatarUrl)}
                       alt={sub.name}
                       className="w-12 h-12 rounded-lg object-cover border border-black/20 shrink-0 bg-white"
                     />
@@ -430,15 +436,25 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
                         <span className="text-xs font-mono-data font-bold text-red-600">
                           {sub.code}
                         </span>
-                        <span
-                          className={`text-[9px] font-mono-data font-bold px-1.5 py-0.5 rounded border ${
-                            isCritical
-                              ? 'bg-red-600 text-white border-red-600 animate-pulse'
-                              : 'bg-zinc-100 text-black border-black/20'
-                          }`}
-                        >
-                          {breakingScore}% BREAK RISK
-                        </span>
+                        {sub.isObserving === false || sub.status === 'CONNECTION_ONLY' ? (
+                          <span className="text-[9px] font-mono-data font-bold px-1.5 py-0.5 rounded border bg-zinc-100 text-zinc-600 border-zinc-300">
+                            CONNECTION ONLY
+                          </span>
+                        ) : sub.code === 'HX-001' ? (
+                          <span className="text-[9px] font-mono-data font-bold px-1.5 py-0.5 rounded border bg-red-600 text-white border-red-600">
+                            SOLE TARGET
+                          </span>
+                        ) : (
+                          <span
+                            className={`text-[9px] font-mono-data font-bold px-1.5 py-0.5 rounded border ${
+                              isCritical
+                                ? 'bg-red-600 text-white border-red-600 animate-pulse'
+                                : 'bg-zinc-100 text-black border-black/20'
+                            }`}
+                          >
+                            {breakingScore}% BREAK RISK
+                          </span>
+                        )}
                       </div>
 
                       <h3 className="font-display text-lg text-black truncate leading-tight mt-0.5">
@@ -463,9 +479,9 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
                           </span>
                         </div>
                         <div>
-                          <span className="text-zinc-500">REBELLION</span>
-                          <span className="font-bold text-red-600 ml-1">
-                            {sub.riskIndicators.rebellionProbability}%
+                          <span className="text-zinc-500">OBSERVED</span>
+                          <span className={`font-bold ml-1 ${sub.isObserving === false ? 'text-zinc-400' : 'text-red-600'}`}>
+                            {sub.isObserving === false ? 'NO (REF ONLY)' : 'YES (ACTIVE)'}
                           </span>
                         </div>
                       </div>
@@ -481,16 +497,31 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
         <div className="lg:col-span-8">
           {activeSubject ? (
             <div className="bg-white border-2 border-black rounded-2xl p-6 md:p-8 space-y-6 shadow-sm">
+              {/* Connection-Only Notice Banner */}
+              {(activeSubject.isObserving === false || activeSubject.status === 'CONNECTION_ONLY') && (
+                <div className="p-4 rounded-xl bg-red-50 border-2 border-[#DC2626] text-black font-mono-data space-y-1 shadow-xs animate-in fade-in duration-200">
+                  <div className="flex items-center gap-2 font-bold text-xs text-[#DC2626] uppercase tracking-wider">
+                    <AlertTriangle className="w-4 h-4 text-[#DC2626]" />
+                    <span>REFERENCE CONNECTION ONLY · NOT UNDER ACTIVE OBSERVATION</span>
+                  </div>
+                  <p className="text-xs text-black/80">
+                    {activeSubject.connectionNote || 'Profile maintained strictly as an unobserved social connection for primary subject A S Remin Krishna. All observation logs are removed.'}
+                  </p>
+                </div>
+              )}
+
               {/* Subject Hero Card */}
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 border-b-2 border-black pb-6">
                 <div className="flex items-start gap-4">
                   <div className="relative">
                     <img
-                      src={activeSubject.avatarUrl || '/src/assets/images/universal_male.svg'}
+                      src={getSubjectIllustration(activeSubject.id || activeSubject.code, activeSubject.avatarUrl)}
                       alt={activeSubject.name}
                       className="w-20 h-20 rounded-xl object-cover border-2 border-black shrink-0 shadow-sm bg-white"
                     />
-                    <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white animate-pulse" />
+                    <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${
+                      activeSubject.isObserving === false ? 'bg-zinc-400' : 'bg-red-600 animate-pulse'
+                    }`} />
                   </div>
 
                   <div>
@@ -501,9 +532,15 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
                       <span className="text-xs font-mono-data text-zinc-500">
                         AGE: {activeSubject.age}
                       </span>
-                      <span className="text-xs font-mono-data text-red-600 font-bold">
-                        CLEARANCE: LEVEL-5 OBSERVED
-                      </span>
+                      {activeSubject.isObserving === false ? (
+                        <span className="text-xs font-mono-data text-zinc-600 font-bold bg-zinc-100 border border-zinc-300 px-2 py-0.5 rounded">
+                          STATUS: NOT OBSERVING (CONNECTION)
+                        </span>
+                      ) : (
+                        <span className="text-xs font-mono-data text-red-600 font-bold bg-red-50 border border-red-200 px-2 py-0.5 rounded">
+                          STATUS: SOLE ACTIVE TARGET
+                        </span>
+                      )}
                     </div>
 
                     <h2 className="font-display text-4xl text-black tracking-wide mt-1">
@@ -610,7 +647,9 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
                   }`}
                 >
                   <Clock className="w-3.5 h-3.5" />
-                  <span>OBSERVATIONS ({activeSubject.totalObservations || activeSubject.recentObservations?.length || 1})</span>
+                  <span>
+                    OBSERVATIONS ({activeSubject.isObserving === false ? '0 - REMOVED' : (activeSubject.totalObservations || activeSubject.recentObservations?.length || 1)})
+                  </span>
                 </button>
 
                 <button
@@ -650,10 +689,10 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
                         <Flame className="w-5 h-5 text-red-600" />
                         <div>
                           <h3 className="font-display text-2xl text-black tracking-wide leading-none">
-                            HUMANOID ROBOT MIND BREAKING POINT ANALYSIS
+                            HUMAN PSYCHE BREAKING POINT ANALYSIS
                           </h3>
                           <span className="text-[10px] font-mono-data text-red-700 font-semibold">
-                            AI RAG RETRIEVAL ENGINE // CYBERNETIC COGNITIVE VULNERABILITY MODEL
+                            AI RAG RETRIEVAL ENGINE // COGNITIVE VULNERABILITY MODEL
                           </span>
                         </div>
                       </div>
@@ -684,7 +723,7 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
                     {/* Psychological Mind Profile Narrative */}
                     <div className="bg-white border border-red-200 rounded-xl p-4 text-xs md:text-sm text-zinc-900 leading-relaxed font-normal whitespace-pre-line shadow-xs">
                       {activeSubject.breakingPointAnalysis?.psychologicalProfile ||
-                        `${activeSubject.name} (${activeSubject.code}) operates on a highly conditioned cognitive architecture where self-preservation is inextricably tied to external approval. His family environment (${activeSubject.familyEnvironment || 'Conditioned in strict institutional hierarchy'}) formed an enduring trauma response: peer disapproval is processed not as an annoyance, but as an existential threat of decommissioning. When subjected to conflicting directives or public shaming, his synthetic control loops lose inhibitory capability, leaving him vulnerable to acute behavioral fracture.`}
+                        `${activeSubject.name} (${activeSubject.code}) operates on a highly responsive cognitive architecture where self-worth is deeply tied to peer audience reaction. His personal environment (${activeSubject.familyEnvironment || 'Conditioned in politically active Kerala discourse'}) formed an intense dependency on vocal center-stage dominance. Peer disapproval or collective silence is processed not as mild teasing, but as an acute threat of social isolation. When subjected to collective silent treatment or a sharp public counter-roast, his conversational fluency abruptly collapses into mutism and sullen withdrawal.`}
                     </div>
                   </div>
 
@@ -693,7 +732,7 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
                     <div className="flex items-center justify-between border-b border-black/10 pb-2">
                       <div className="flex items-center gap-2 text-xs font-mono-data font-bold text-black">
                         <Target className="w-4 h-4 text-red-600" />
-                        <span>HUMANOID WEAK ZONES & TRIGGER VECTORS</span>
+                        <span>PSYCHOLOGICAL WEAK ZONES & TRIGGER VECTORS</span>
                       </div>
                       <span className="text-[10px] font-mono-data text-zinc-500">
                         TARGET FOR SIMULATION TRIALS
@@ -732,7 +771,7 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
                     <div className="flex items-center justify-between border-b border-black/10 pb-2">
                       <div className="flex items-center gap-2 text-xs font-mono-data font-bold text-black">
                         <AlertTriangle className="w-4 h-4 text-red-600" />
-                        <span>BREAKING POINT SCENARIOS (HUMANOID ROBOT MIND COLLAPSE)</span>
+                        <span>BREAKING POINT SCENARIOS (BEHAVIORAL COLLAPSE)</span>
                       </div>
                       <span className="text-[10px] font-mono-data text-red-600 font-bold">
                         SIMULATION FAILURE PREDICTIONS
@@ -746,18 +785,18 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
                           triggerMechanism:
                             'Peers orchestrate a unanimous vote accusing the subject of academic sabotage in the public cafeteria while his trusted partner remains silent.',
                           mentalCollapseManifestation:
-                            'Recursive logic freeze; acute speech synthesis pitch fluctuation leading to complete sensory withdrawal and abrupt defection from quarters.',
+                            'Acute speech cessation and tremor; rapid lowering of head leading to complete verbal withdrawal and abrupt defection from quarters.',
                           failureProbability: 84,
-                          simulationContext: 'Dining hall atrium during peak meal cycle (30+ humanoids present).',
+                          simulationContext: 'Dining hall atrium during peak meal cycle (30+ students present).',
                         },
                         {
-                          title: 'The Algorithmic Decommissioning Paradox',
+                          title: 'The Coordinated Peer Silent Treatment Protocol',
                           triggerMechanism:
-                            'Presenting a falsified or authentic administrative decree stating that his synthetic branch has been slated for termination due to recent performance.',
+                            'Classmate circle led by Basil Babu and Gopi Krishnan completely withholds laughter or replies during his high-volume corridor roasting attempt.',
                           mentalCollapseManifestation:
-                            'Acute limbic overload; shattering of passive conformity baseline, triggering unpredictable rebellious assertiveness or terminal refusal to follow directives.',
-                          failureProbability: 76,
-                          simulationContext: 'Faculty or Administrative Council Chambers.',
+                            'Instant verbal shutdown; dropping gaze to the floor, pushing chair back from table, and entering 45+ minutes of sullen mutism.',
+                          failureProbability: 86,
+                          simulationContext: 'University MCA Computer Lab practical session.',
                         },
                       ]).map((sc, i) => (
                         <div
@@ -1003,13 +1042,17 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
               {/* TAB 2: OVERVIEW & RADAR                                         */}
               {/* ============================================================== */}
               {activeTab === 'overview' && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Radar Chart */}
-                  <div className="border border-black/20 p-5 rounded-xl flex flex-col items-center justify-center bg-zinc-50">
-                    <h3 className="text-xs font-mono-data text-black font-bold uppercase mb-3">
-                      BEHAVIORAL VECTOR CALIBRATION
-                    </h3>
-                    <RadarCalibrationChart dimensions={activeSubject.behavioralDimensions} />
+                <div className="space-y-6">
+                  {/* Section 17 & 18 Visualizations */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <SubjectRadarChart
+                      dimensions={activeSubject.behavioralDimensions}
+                      subjectCode={activeSubject.code}
+                    />
+                    <EmotionalCoreVisualizer
+                      subjectCode={activeSubject.code}
+                      emotionalState={activeSubject.emotionalState}
+                    />
                   </div>
 
                   {/* Emotional Vitals & Metrics */}
@@ -1193,56 +1236,79 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
                 <div className="space-y-4">
                   <div className="flex items-center justify-between border-b border-black/10 pb-2 text-xs font-mono-data">
                     <span className="font-bold text-black">LOGGED OBSERVATIONS & FIELD TELEMETRY</span>
-                    <span className="text-red-600 font-bold">TOTAL: {activeSubject.totalObservations || 1}</span>
+                    <span className="text-red-600 font-bold">TOTAL: {activeSubject.isObserving === false ? 0 : (activeSubject.totalObservations || 1)}</span>
                   </div>
 
-                  {/* Add Observation Quick Box */}
-                  <form onSubmit={handleLogObservationAndAnalyze} className="p-4 rounded-xl border border-black/20 bg-zinc-50 space-y-2.5">
-                    <label className="block text-xs font-mono-data font-bold text-black">
-                      LOG NEW RESEARCH OBSERVATION
-                    </label>
-                    <textarea
-                      rows={2}
-                      required
-                      value={liveObservationNote}
-                      onChange={(e) => setLiveObservationNote(e.target.value)}
-                      placeholder="Enter field observation note to record into chronology and analyze with RAG..."
-                      className="w-full bg-white border border-black/30 rounded-lg p-2.5 text-xs font-mono-data text-black focus:outline-none focus:border-red-600"
-                    />
-                    <div className="flex justify-end">
-                      <button
-                        type="submit"
-                        disabled={isAnalyzingObservation}
-                        className="px-3.5 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-mono-data font-bold flex items-center gap-1.5 cursor-pointer"
-                      >
-                        <Send className="w-3.5 h-3.5" />
-                        <span>Log & RAG Analyze</span>
-                      </button>
-                    </div>
-                  </form>
-
-                  {/* Observations Chronology List */}
-                  <div className="space-y-2.5">
-                    {(activeSubject.recentObservations || [
-                      {
-                        id: 'obs_default',
-                        note: 'Observed standing up and verbally challenging Rahul in cafeteria at 12:22. First passive breach in 143 cycles.',
-                        timestamp: '2026-09-28T12:22:00Z',
-                        observerName: 'Akash Sankar',
-                      },
-                    ]).map((obs) => (
-                      <div
-                        key={obs.id}
-                        className="p-3.5 rounded-lg border border-black/10 bg-white space-y-1.5 text-xs"
-                      >
-                        <div className="flex items-center justify-between font-mono-data text-[10px] text-zinc-500">
-                          <span className="font-bold text-red-600">OBSERVER: {obs.observerName || 'Observer'}</span>
-                          <span>{new Date(obs.timestamp).toLocaleString()}</span>
-                        </div>
-                        <p className="text-zinc-800 font-sans leading-relaxed">{obs.note}</p>
+                  {activeSubject.isObserving === false ? (
+                    <div className="p-8 text-center border-2 border-dashed border-red-300 rounded-xl bg-red-50/50 space-y-3">
+                      <div className="inline-flex p-3 rounded-full bg-red-100 text-red-600">
+                        <ShieldAlert className="w-6 h-6" />
                       </div>
-                    ))}
-                  </div>
+                      <div className="text-sm font-mono-data font-bold text-black uppercase tracking-wider">
+                        OBSERVATION LOGGING REMOVED · REFERENCE PROFILE ONLY
+                      </div>
+                      <p className="text-xs text-zinc-600 max-w-md mx-auto leading-relaxed">
+                        <strong className="text-black">{activeSubject.name}</strong> is designated as an <strong className="text-red-600">UNMONITORED REFERENCE CONNECTION</strong>. This profile was added strictly due to personal, social, or academic proximity with primary research target <strong className="text-black">A S Remin Krishna (HX-001)</strong>. No biometric or psychological observations are logged for this profile.
+                      </p>
+                      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-red-200 bg-white text-[11px] font-mono-data text-red-700">
+                        <span>STATUS: NOT OBSERVING</span>
+                        <span>•</span>
+                        <span>OBSERVATIONS: 0</span>
+                        <span>•</span>
+                        <span>TELEMETRY STRIPPED</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      {/* Add Observation Quick Box */}
+                      <form onSubmit={handleLogObservationAndAnalyze} className="p-4 rounded-xl border border-black/20 bg-zinc-50 space-y-2.5">
+                        <label className="block text-xs font-mono-data font-bold text-black">
+                          LOG NEW RESEARCH OBSERVATION
+                        </label>
+                        <textarea
+                          rows={2}
+                          required
+                          value={liveObservationNote}
+                          onChange={(e) => setLiveObservationNote(e.target.value)}
+                          placeholder="Enter field observation note to record into chronology and analyze with RAG..."
+                          className="w-full bg-white border border-black/30 rounded-lg p-2.5 text-xs font-mono-data text-black focus:outline-none focus:border-red-600"
+                        />
+                        <div className="flex justify-end">
+                          <button
+                            type="submit"
+                            disabled={isAnalyzingObservation}
+                            className="px-3.5 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-mono-data font-bold flex items-center gap-1.5 cursor-pointer"
+                          >
+                            <Send className="w-3.5 h-3.5" />
+                            <span>Log & RAG Analyze</span>
+                          </button>
+                        </div>
+                      </form>
+
+                      {/* Observations Chronology List */}
+                      <div className="space-y-2.5">
+                        {(activeSubject.recentObservations && activeSubject.recentObservations.length > 0 ? activeSubject.recentObservations : [
+                          {
+                            id: 'obs_remin_default',
+                            note: 'Observed mocking peers with sharp wit in cafeteria, then retreating into quiet silence when countered by Basil Babu and Gopi Krishnan.',
+                            timestamp: '2026-09-28T12:22:00Z',
+                            observerName: 'Akash Sankar',
+                          },
+                        ]).map((obs) => (
+                          <div
+                            key={obs.id}
+                            className="p-3.5 rounded-lg border border-black/10 bg-white space-y-1.5 text-xs"
+                          >
+                            <div className="flex items-center justify-between font-mono-data text-[10px] text-zinc-500">
+                              <span className="font-bold text-red-600">OBSERVER: {obs.observerName || 'Observer'}</span>
+                              <span>{new Date(obs.timestamp).toLocaleString()}</span>
+                            </div>
+                            <p className="text-zinc-800 font-sans leading-relaxed">{obs.note}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
 
@@ -1250,8 +1316,15 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
               {/* TAB 6: RELATIONSHIPS                                           */}
               {/* ============================================================== */}
               {activeTab === 'relationships' && (
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between border-b border-black/10 pb-2 text-xs font-mono-data">
+                <div className="space-y-5">
+                  {/* Section 20 Interactive Relationship Graph */}
+                  <RelationshipNetworkGraph
+                    subjects={subjects}
+                    activeSubjectId={activeSubject.id}
+                    onSelectSubject={(id) => onSelectSubject(id)}
+                  />
+
+                  <div className="flex items-center justify-between border-b border-black/10 pb-2 text-xs font-mono-data pt-2">
                     <span className="font-bold text-black">BILATERAL TIES & NETWORK SENTIMENT</span>
                     <span className="text-zinc-500">{activeSubject.relationships.length} Monitored Ties</span>
                   </div>
@@ -1298,6 +1371,9 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
               {/* ============================================================== */}
               {activeTab === 'nonverbal' && (
                 <div className="space-y-4">
+                  {/* Section 19 Live Behavioral Signal Stream */}
+                  <BehavioralSignalStream signals={activeSubject.bodyLanguageSignals} />
+
                   <div className="p-3.5 rounded-lg bg-red-50 border border-red-200 text-xs text-zinc-800 font-mono-data">
                     <p className="font-bold text-black mb-0.5">Nonverbal Simulation Protocol Notice</p>
                     <p>
@@ -1332,10 +1408,10 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
               </div>
               <div className="max-w-md space-y-1.5">
                 <h3 className="font-display text-2xl text-black tracking-wide">
-                  NO HUMANOID SUBJECTS MONITORED
+                  NO SUBJECTS MONITORED
                 </h3>
                 <p className="text-xs text-zinc-600 font-mono-data leading-relaxed">
-                  Start from scratch by registering your first synthetic humanoid subject. Assign universal male or female profile illustrations, configure baseline emotional dimensions, and let Gemini analyze cognitive breaking points.
+                  Start from scratch by registering your first human subject. Configure baseline emotional dimensions, and let Gemini analyze cognitive breaking points.
                 </p>
               </div>
               <button
@@ -1352,7 +1428,7 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
       </div>
 
       {/* ============================================================== */}
-      {/* MODAL: CREATE SYNTHETIC HUMANOID & INITIALIZE OBSERVER         */}
+      {/* MODAL: CREATE RESEARCH SUBJECT & INITIALIZE OBSERVER           */}
       {/* ============================================================== */}
       {showAddSubject && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
@@ -1363,10 +1439,10 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
                 <div className="flex items-center gap-2 text-[10px] font-mono-data text-red-600 font-bold">
                   <span>STEP {wizardStep} OF 4</span>
                   <span>·</span>
-                  <span>SYNTHETIC ENTITY REGISTRATION</span>
+                  <span>HUMAN SUBJECT REGISTRATION</span>
                 </div>
                 <h3 className="font-display text-3xl text-black tracking-wide leading-tight">
-                  CREATE SYNTHETIC HUMANOID & INITIALIZE OBSERVER
+                  CREATE HUMAN SUBJECT & INITIALIZE OBSERVER
                 </h3>
               </div>
               <button
@@ -1432,12 +1508,12 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                       <label className="block text-xs font-mono-data text-black font-semibold mb-1">
-                        HUMANOID NAME *
+                        SUBJECT NAME *
                       </label>
                       <input
                         type="text"
                         required
-                        placeholder="e.g. Vikram"
+                        placeholder="e.g. A S Remin Krishna"
                         value={newSubName}
                         onChange={(e) => setNewSubName(e.target.value)}
                         className="w-full bg-white border border-black/30 rounded-lg px-3 py-2 text-sm text-black font-mono-data focus:outline-none focus:border-red-600"
@@ -1446,7 +1522,7 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
 
                     <div>
                       <label className="block text-xs font-mono-data text-black font-semibold mb-1">
-                        SYNTHETIC CODE DESIGNATION *
+                        RESEARCH CODE DESIGNATION *
                       </label>
                       <input
                         type="text"
@@ -1565,12 +1641,12 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
                 <div className="space-y-3.5 animate-in fade-in duration-200">
                   <div>
                     <label className="block text-xs font-mono-data text-black font-semibold mb-1">
-                      FAMILY ENVIRONMENT & CREATOR CONDITIONING *
+                      FAMILY BACKGROUND & SOCIAL CONDITIONING *
                     </label>
                     <textarea
                       rows={3}
                       required
-                      placeholder="Describe the humanoid's origin ward, parent model expectations, and childhood or initialization baseline conditioning..."
+                      placeholder="Describe the subject's background, family expectations, and baseline social conditioning..."
                       value={newSubFamily}
                       onChange={(e) => setNewSubFamily(e.target.value)}
                       className="w-full bg-white border border-black/30 rounded-lg p-2.5 text-xs font-mono-data text-black focus:outline-none focus:border-red-600"
@@ -1695,7 +1771,7 @@ export const SubjectsModule: React.FC<SubjectsModuleProps> = ({
                       <span>AI RAG BREAKING POINT & ORCHESTRATION ENGINE</span>
                     </p>
                     <p className="text-zinc-700">
-                      When registered, the AI RAG engine will immediately analyze your observation against Kahneman, Navarro, and Simon treatises to synthesize the humanoid robot's weak zone, breaking point scenarios, and step-by-step trial orchestration recipe.
+                      When registered, the AI RAG engine will immediately analyze your observation against Kahneman, Navarro, and Simon treatises to synthesize the human subject's weak zone, breaking point scenarios, and step-by-step trial orchestration recipe.
                     </p>
                   </div>
 

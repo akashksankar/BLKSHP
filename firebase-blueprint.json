@@ -2,7 +2,7 @@
   "entities": {
     "Subject": {
       "title": "Subject",
-      "description": "Synthetic Humanoid Robot Profile with Mind Architecture and Weak Zones",
+      "description": "Human Subject Profile with Mind Architecture and Weak Zones",
       "type": "object",
       "properties": {
         "id": { "type": "string" },
